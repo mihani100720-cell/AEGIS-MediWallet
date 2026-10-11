@@ -1,112 +1,403 @@
-# AEGIS / MediWallet — Secure Patient-Owned Medical Vault
+ # 🛡️ AEGIS MediWallet
 
-> **AEGIS / MediWallet** is a decentralized, patient-centric healthcare platform featuring AES-GCM encrypted medical records, multilingual Indian language AI assistants, offline emergency QR tokens, and verified clinical sharing workflows.
+### Your Health. Your Records. Your Control.
 
----
+AEGIS MediWallet is a digital healthcare management platform designed to bring medical records, prescriptions, appointments, and healthcare-related services together in one place. Built with Next.js and FastAPI, the project explores secure, organized, and accessible digital healthcare management.
 
-## 🏛️ Project Architecture
+## 🌐 Live Demo
 
+- **Frontend:** https://aegis-mediwallet-web-copy-name.onrender.com/
+- **Backend API:** https://aegis-mediwallet.onrender.com/
+- **API Documentation (Swagger):** https://aegis-mediwallet.onrender.com/docs
+- **GitHub Repository:** https://github.com/mihani100720-cell/AEGIS-MediWallet
+
+## 📌 Overview
+
+Healthcare information is often scattered across prescriptions, medical documents, appointment records, and different healthcare services. AEGIS MediWallet aims to provide a centralized digital platform for organizing healthcare information and accessing related services.
+
+The application combines a modern web interface with a Python-based backend to support healthcare management workflows, authentication, medical records, prescriptions, appointments, consent, auditing, and AI-assisted services.
+
+### 🎯 Project Objectives
+
+- Centralize healthcare information in one digital platform.
+- Simplify medical-record and prescription management.
+- Support appointment and doctor-related workflows.
+- Explore OCR-based medical document processing.
+- Integrate AI-assisted healthcare services.
+- Improve the organization and accessibility of healthcare information.
+
+## ✨ Key Features
+
+### 🏥 Medical Records Management
+- Medical-record-related API workflows.
+- Support for organizing healthcare information.
+- Record and folder management functionality.
+
+### 💊 Prescription and Medicine Management
+- Prescription-related operations.
+- Medicine management workflows.
+- Support for digitized healthcare information.
+
+### 📄 OCR and Document Processing
+- OCR-related components for text extraction from documents.
+- Medical-document processing workflows.
+- A foundation for reducing manual data entry.
+
+### 📅 Appointments and Doctor Management
+- Appointment-related API endpoints.
+- Doctor-related information workflows.
+- Healthcare coordination functionality.
+
+### 🔐 Authentication and Vault Services
+- Authentication-related API functionality.
+- JWT-related dependencies.
+- Vault and record-handling services.
+
+### 🤝 Consent and Audit
+- Consent-related workflows.
+- Audit-related functionality.
+- A foundation for tracking access and application activities.
+
+### 🚨 Emergency and Family Features
+- Emergency-related workflows.
+- Family-related functionality.
+- Additional healthcare management capabilities.
+
+### 🧠 AI-Assisted Healthcare
+- AI chat-related API functionality.
+- Diet-related services.
+- AI integration components for supported application workflows.
+
+*Note: Feature availability depends on the current implementation and configuration. Not every module has been independently verified as fully functional.*
+
+## 🛠️ Technology Stack
+
+### Frontend
+- Next.js
+- React
+- JavaScript / TypeScript
+- Node.js
+- npm
+
+### Backend
+- Python
+- FastAPI
+- Uvicorn
+- SQLAlchemy
+- SQLite
+- PyJWT
+- argon2-cffi
+
+### AI and Document Processing
+- AI service integrations
+- OCR-related components
+- Document-processing workflows
+
+### Development and Deployment
+- Git
+- GitHub
+- Render
+- Environment variables
+
+## 🏗️ System Architecture
+
+```text
+                    USER
+                      |
+                      v
+           +----------------------+
+           |   Next.js Frontend   |
+           |   React Interface    |
+           +----------------------+
+                      |
+                      | HTTP Requests
+                      v
+           +----------------------+
+           |    FastAPI Backend   |
+           |    Uvicorn Server    |
+           +----------------------+
+                      |
+         +------------+------------+
+         |            |            |
+         v            v            v
+   Medical Records  Authentication  AI / OCR
+   Prescriptions    Consent / Audit Services
+         |            |            |
+         +------------+------------+
+                      |
+                      v
+           +----------------------+
+           |  SQLAlchemy / ORM    |
+           +----------------------+
+                      |
+                      v
+                  Database
 ```
-AEGIS/
+
+## 📂 Project Structure
+
+```text
+AEGIS-MediWallet/
+│
 ├── apps/
-│   └── web/                               # Next.js 16 (App Router) + React 19 Frontend
-│       ├── src/
-│       │   ├── app/
-│       │   │   ├── admin/                 # Healthcare Provider / Admin Portal
-│       │   │   ├── dashboard/             # Patient Health Dashboard & Timeline
-│       │   │   ├── doctor/                # Doctor / Clinical Verification View
-│       │   │   ├── vault/                 # Encrypted Medical Vault & Uploads
-│       │   │   ├── login/ & signup/       # Authentication Pages
-│       │   │   └── components/            # Reusable UI & Vault Components
-│       │   └── lib/                       # API Client & i18n Translations
-│       └── package.json
+│   └── web/
+│       └── ...                 # Next.js frontend
 │
 ├── services/
-│   └── api/                               # FastAPI Python Backend
+│   └── api/
 │       ├── app/
-│       │   ├── api/v1/endpoints/          # REST Endpoints (Auth, Vault, OCR, AI, QR)
-│       │   ├── core/                      # Config, Security, JWT & AES-GCM Cryptography
-│       │   ├── models/                    # SQLite Database Models & Clinical Seed Data
-│       │   ├── schemas/                   # Pydantic Request/Response Models
-│       │   └── services/                  # ML OCR, Vault Encryption & AI Engines
-│       ├── data/                          # SQLite DB & Encrypted Record Vault
-│       ├── tests/                         # Security & OCR Test Suites
+│       │   ├── main.py         # FastAPI entry point
+│       │   ├── api/
+│       │   │   └── v1/
+│       │   │       └── endpoints/
+│       │   │           ├── ai_chat.py
+│       │   │           ├── appointments.py
+│       │   │           ├── audit.py
+│       │   │           ├── auth.py
+│       │   │           ├── consent.py
+│       │   │           ├── diet.py
+│       │   │           ├── doctors.py
+│       │   │           ├── emergency.py
+│       │   │           ├── family.py
+│       │   │           ├── folders.py
+│       │   │           ├── medicines.py
+│       │   │           ├── prescriptions.py
+│       │   │           └── records.py
+│       │   ├── core/
+│       │   ├── models/
+│       │   ├── services/
+│       │   └── ...
 │       └── requirements.txt
 │
-├── README_OCR.md                          # Clinical OCR Setup & Indian ML Model Docs
-└── MediWallet_AEGIS_MedicalVault.zip      # Full Project Source Code Archive
+├── models/
+├── README.md
+├── README_OCR.md
+└── .env.example
 ```
 
----
+*This is a simplified overview; the repository may contain additional files and directories.*
 
-## 🚀 Quick Start Guide
+## ⚙️ Getting Started
 
-### 1. Backend (FastAPI Service)
+### Prerequisites
 
-#### Prerequisites
-- Python 3.10+
+Install Python, Node.js, npm, and Git before running the project locally.
 
-#### Installation & Startup
+### 1. Clone the Repository
+
 ```bash
-# Navigate to the API service directory
+git clone https://github.com/mihani100720-cell/AEGIS-MediWallet.git
+cd AEGIS-MediWallet
+```
+
+### 2. Set Up the Backend
+
+```bash
 cd services/api
-
-# Create & activate a virtual environment
 python -m venv .venv
-# On Windows:
-.venv\Scripts\activate
-# On Linux/macOS:
-source .venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the API server
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-- **Interactive API Documentation:** [http://localhost:8000/docs](http://localhost:8000/docs)
-- **Health Check Endpoint:** [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health)
+Activate the virtual environment on Windows PowerShell:
 
----
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
 
-### 2. Frontend (Next.js Web Portal)
+Install dependencies:
 
-#### Prerequisites
-- Node.js 18+ or 20+
-- npm or pnpm
-
-#### Installation & Startup
 ```bash
-# Navigate to the frontend directory
+python -m pip install -r requirements.txt
+```
+
+Configure the required environment variables according to the application's configuration. Do not commit secrets or `.env` files to GitHub.
+
+Start the backend:
+
+```bash
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+Backend URLs:
+
+- API: http://127.0.0.1:8000/
+- Swagger documentation: http://127.0.0.1:8000/docs
+- Health endpoint: http://127.0.0.1:8000/api/v1/health
+
+If port 8000 is occupied, use another available port.
+
+### 3. Set Up the Frontend
+
+Open a second terminal from the repository root:
+
+```bash
 cd apps/web
-
-# Install dependencies
 npm install
+```
 
-# Start development server
+Configure the frontend's backend URL using the environment-variable name expected by the application.
+
+For local development, the backend address is:
+
+```text
+http://127.0.0.1:8000
+```
+
+Start the frontend development server:
+
+```bash
 npm run dev
 ```
 
-- **Web Application URL:** [http://localhost:3000](http://localhost:3000)
+Open the local URL printed in the terminal, commonly:
+
+http://localhost:3000
+
+### 4. Build the Frontend
+
+```bash
+npm run build
+```
+
+The build command should complete successfully before deployment.
+
+## 🔌 API Documentation
+
+Explore the deployed API through FastAPI's interactive Swagger interface.
+
+- **Live API:** https://aegis-mediwallet.onrender.com/
+- **Swagger UI:** https://aegis-mediwallet.onrender.com/docs
+- **Health Check:** https://aegis-mediwallet.onrender.com/api/v1/health
+
+### API Modules
+
+| Module | Purpose |
+|---|---|
+| Authentication | Authentication workflows |
+| Records | Medical-record operations |
+| Prescriptions | Prescription workflows |
+| Appointments | Appointment operations |
+| Doctors | Doctor-related functionality |
+| Medicines | Medicine management |
+| Consent | Consent workflows |
+| Audit | Audit-related operations |
+| Emergency | Emergency-related functionality |
+| Family | Family-related workflows |
+| Folders | Folder management |
+| Diet | Diet-related functionality |
+| AI Chat | AI-assisted interactions |
+
+The Swagger documentation shows the routes currently exposed by the deployed backend.
+
+## ☁️ Deployment on Render
+
+The frontend and backend are deployed as separate Render services.
+
+### Backend Configuration
+
+| Setting | Value |
+|---|---|
+| Runtime | Python 3 |
+| Root Directory | `services/api` |
+| Build Command | `pip install -r requirements.txt` |
+| Start Command | `uvicorn app.main:app --host 0.0.0.0 --port $PORT` |
+| Hosting | Render |
+
+### Frontend Configuration
+
+| Setting | Value |
+|---|---|
+| Runtime | Node |
+| Root Directory | `apps/web` |
+| Build Command | `npm install && npm run build` |
+| Start Command | `npm run start` |
+| Hosting | Render |
+
+The frontend must be configured to communicate with the deployed backend. Configure the required environment variables and allow the correct frontend origin in the backend's CORS settings.
+
+## 🔒 Security and Privacy
+
+Healthcare information is sensitive. A successful deployment does not automatically mean that an application is ready for real patient data.
+
+Before using real medical information, verify:
+
+- Strong, unique server secrets stored in environment variables.
+- Secure password hashing.
+- Authentication and authorization for sensitive operations.
+- Properly restricted CORS origins.
+- Appropriate encryption and key management.
+- Persistent database and document storage.
+- Safe handling of uploaded files.
+- Audit logging and error handling.
+- Backup and recovery procedures.
+- Applicable healthcare privacy and data-protection requirements.
+
+**Important:** Use fictional test data during development. Do not store real patient information in the deployed demo until security and data persistence have been properly verified.
+
+A local SQLite database on a hosted service may not provide reliable persistence across restarts or redeployments unless appropriate persistent storage is configured.
+
+## 🧪 Testing
+
+The backend includes testing dependencies such as `pytest` and `httpx`.
+
+Run backend tests from the backend directory:
+
+```bash
+python -m pytest
+```
+
+Recommended testing areas include:
+
+- Backend startup and health checks.
+- Frontend-to-backend communication.
+- Authentication and authorization.
+- Medical-record and prescription workflows.
+- OCR and AI integrations.
+- Database persistence.
+- Error handling and external-service failures.
+
+## 🚀 Future Improvements
+
+Potential areas for future development include:
+
+- More comprehensive automated testing.
+- Stronger role-based access controls.
+- Improved medical-document extraction and validation.
+- Enhanced consent and audit workflows.
+- Reliable database persistence and backups.
+- Improved accessibility and multilingual support.
+- Better monitoring and error reporting.
+- Automated deployment checks.
+
+These are possible enhancements and are not claims that every feature is currently implemented.
+
+## 🤝 Contributing
+
+Contributions, suggestions, and bug reports are welcome.
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Implement your changes.
+4. Run the relevant tests.
+5. Submit a pull request describing your contribution.
+
+Please do not commit secrets, private medical information, or sensitive user data.
+
+## 📄 License
+
+No open-source license has been specified in this README. Add a `LICENSE` file if you intend to distribute the project under a particular open-source license.
+
+## 👩‍💻 Project Information
+
+- **Project Name:** AEGIS MediWallet
+- **Domain:** Healthcare Technology / Digital Health
+- **Frontend:** Next.js and React
+- **Backend:** Python and FastAPI
+- **Database:** SQLite default configuration; verify deployed persistence
+- **Deployment:** Render
+- **Repository:** https://github.com/mihani100720-cell/AEGIS-MediWallet
 
 ---
 
-## 🔑 Pre-Configured Test Accounts
+### AEGIS MediWallet
 
-The SQLite database seeds automatically on first launch with sample patient and clinical accounts:
-
-| Role | Email / ID | Password | Access Capabilities |
-| :--- | :--- | :--- | :--- |
-| **Patient** | `patient@example.com` | `password123` | Patient Vault, Emergency QR, Multilingual AI, Timeline |
-| **Doctor** | `doctor@example.com` | `password123` | Doctor Clinical Portal, Verified Record Access |
-| **Admin** | `admin@example.com` | `password123` | Provider Admin Panel, Consent & Audit Logs |
-
----
-
-## 🛡️ Core Security Features
-
-1. **Client & Server-Side AES-256-GCM Encryption:** Medical documents and prescription images stored with tamper-resistant authentication tags.
-2. **Zero-Knowledge Emergency Access:** Offline emergency QR tokens encode vital triage data (Blood type, allergies, emergency contacts) with verification signatures.
-3. **Audit Trails & Dynamic Consent:** Every access request generates an immutable audit record and requires explicit patient consent duration.
-4. **Multilingual Clinical AI:** Intelligent prescription parsing supporting English, Hindi, Bengali, Tamil, Telugu, and other Indian regional languages.
+*Making healthcare information more organized, accessible, and easier to manage.*
