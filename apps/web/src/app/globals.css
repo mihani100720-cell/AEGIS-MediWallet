@@ -1,0 +1,258 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #F5F8F5;
+    --foreground: #26352B;
+    --card: #FFFFFF;
+    --card-foreground: #26352B;
+    --primary: #168653;
+    --primary-hover: #126640;
+    --primary-foreground: #FFFFFF;
+    --mint: #EAF6EE;
+    --muted: #647067;
+    --border: #DDE7DF;
+    --ring: #168653;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #F5F8F5;
+    color: #26352B;
+    font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .font-serif-editorial {
+    font-family: "Newsreader", Georgia, Cambria, "Times New Roman", Times, serif;
+  }
+}
+
+/* ==================== CLEAN HEALTHCARE CARD ==================== */
+.clean-card {
+  background-color: #FFFFFF;
+  border: 1px solid #DDE7DF;
+  box-shadow: 0 1px 3px 0 rgba(18, 102, 64, 0.04), 0 1px 2px -1px rgba(18, 102, 64, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.clean-card:hover {
+  border-color: #168653;
+  box-shadow: 0 6px 12px -2px rgba(22, 134, 83, 0.08), 0 3px 6px -3px rgba(22, 134, 83, 0.05);
+}
+
+/* ==================== BRAND BUTTON UTILITIES ==================== */
+.btn-primary {
+  background-color: #168653;
+  color: #FFFFFF;
+  font-weight: 600;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background-color: #126640;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-mint {
+  background-color: #EAF6EE;
+  color: #126640;
+  border: 1px solid #DDE7DF;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-mint:hover {
+  background-color: #d8eedf;
+  border-color: #168653;
+}
+
+/* ==================== VAULT GLOW & SHIELDS ==================== */
+.vault-shield-gradient {
+  background: linear-gradient(145deg, #168653 0%, #126640 100%);
+}
+
+.vault-mint-surface {
+  background: #EAF6EE;
+  border: 1px solid #DDE7DF;
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0.5deg);
+  }
+}
+
+@keyframes laser-sweep {
+  0% {
+    top: 5%;
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 92%;
+    opacity: 0.3;
+  }
+}
+
+@keyframes orb-drift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(25px, -18px) scale(1.06);
+  }
+  66% {
+    transform: translate(-18px, 15px) scale(0.96);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.animate-float {
+  animation: float 4.5s ease-in-out infinite;
+}
+
+.animate-float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.animate-laser {
+  animation: laser-sweep 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+.animate-orb {
+  animation: orb-drift 14s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2.4s infinite;
+}
+
+.glass-flow {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.flow-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.flow-card:hover {
+  transform: translateY(-6px);
+}
+
+/* ==================== CUSTOM SCROLLBARS ==================== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F5F8F5;
+}
+::-webkit-scrollbar-thumb {
+  background: #DDE7DF;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #168653;
+}
+
+/* ==================== FORM INPUT FOCUS ==================== */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #168653 !important;
+  box-shadow: 0 0 0 3px rgba(22, 134, 83, 0.15) !important;
+}
+
+/* ==================== SMOOTH TRANSITIONS ==================== */
+button, a, [role="button"] {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  header, nav, aside, footer, button, .no-print {
+    display: none !important;
+  }
+  body {
+    background: #FFFFFF;
+    color: #000000;
+  }
+  .print-card {
+    border: 1px solid #DDE7DF;
+    border-radius: 8px;
+    padding: 16px;
+  }
+}

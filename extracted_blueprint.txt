@@ -1,0 +1,1914 @@
+MediWallet (Aegis Care) — Complete Development Blueprint
+Your source specification, preserved in full, followed by the CRD, PRD and Antigravity implementation plan
+Prepared for Mihika
+9 October 2026
+Contents: Part A — your source document, preserved (all text, tables, code blocks and images). Part B — feature and technology audit. Part C — Customer Requirements Document (CRD). Part D — Product Requirements Document (PRD). Part E — Antigravity implementation plan. Part F — assumptions, open questions and readiness.
+Tags used: [DOC] taken from your document; [INF] inferred; [P] proposed where your document is silent.
+Part A — Source Specification (preserved from your uploaded document)
+The content below is your uploaded MEDIWALLET.docx, kept in its original order and wording. The only formatting change is that the folder-tree listings are set in code blocks and three screenshots are resized to fit the page.
+This is your consolidated master specification for the hackathon project, including patient-specific AI, multilingual voice, offline emergency QR, handwritten prescription recognition, family profiles, secure doctor sharing, and patient-controlled medical records.
+MEDIWALLET
+Your Health. Your Authority. Your Shield.
+Patient-owned health records · Family access · AI health memory · Secure medical sharing
+Complete feature list — 18 core modules
+Organised by functionality, with your new family authentication feature included as Feature 3.
+1. Smart Medical Record Vault
+Upload or scan medical reports, prescriptions, lab results, imaging reports and discharge summaries.
+Support PDF, JPG and PNG files.
+Organise documents by date, category, doctor and hospital.
+Search, preview, download and manage records.
+Preserve original documents, detect possible duplicates and maintain a chronological health timeline.
+Track OCR processing and allow correction of extracted information.
+2. Secure Authentication and Session Management
+Patient and doctor accounts.
+Secure login, account recovery and session management.
+Device-supported biometrics through passkeys where supported.
+Rate limiting, login-attempt logging and session revocation.
+Security alerts for relevant suspicious activity.
+3. NEW — Family Face Authentication + OTP Fallback
+Enrol consenting family members and let them use face verification as an optional way to authenticate their individual accounts.
+Create separate profiles for family members.
+Capture enrolment images with explicit consent.
+Verify a face against the enrolled profile.
+Use liveness checks to reduce photo and video replay attacks.
+If verification fails, the camera is unavailable, or the user opts out, offer OTP or passkey verification.
+Send OTPs to verified phone numbers or email addresses.
+Rate-limit attempts and protect against repeated verification abuse.
+Log authentication events and notify users of relevant suspicious activity.
+Critical: Opening the website must not secretly activate the camera. Ask for permission and explain the purpose first. A successful face match identifies an account; it does not grant access to every family member's medical records.
+4. Unauthorised-Access Detection and Alerts
+Detect repeated failed logins and suspicious access patterns.
+Temporarily restrict excessive attempts.
+Maintain a security-event timeline.
+Notify users of relevant events.
+Let users inspect and revoke active sessions.
+Do not secretly photograph suspected intruders. Camera use requires transparent permission and a justified purpose.
+5. Doctor Verification System
+Doctor registration and professional credential submission.
+Pending, verified and rejected statuses.
+Admin review and verification timestamps.
+Display verification status before a patient approves sharing.
+Restrict sensitive doctor functions until the required checks are complete.
+A badge must represent actual verification, not just successful registration.
+NBHealth Portal
+6. QR-Based Secure Medical Sharing
+Doctor displays a short-lived QR access request.
+Patient scans it and reviews doctor identity and verification status.
+Patient chooses specific records, purpose and access duration.
+Patient explicitly approves or rejects the request.
+Access is bound to the intended doctor account.
+Patients can revoke future access.
+Backend checks permissions for every protected request.
+The QR must not contain medical records or a permanent access token.
+7. OPD and Admission Toggle
+OPD mode
+Sharing OFF by default.
+Share selected documents for a temporary consultation.
+Expire access automatically.
+Admission mode
+Offer a broader selection of relevant medical records.
+Patient reviews and explicitly approves the scope and duration.
+Unselected records remain restricted.
+Switching Admission ON must never automatically share the entire database.
+8. Limited-Time Access and Consent Management
+Choose the access duration and purpose.
+Display recipient, documents and expiry time.
+Automatically expire grants.
+Reject expired or revoked access.
+Allow patients to revoke future access.
+Keep an audit trail of approvals and revocations.
+Revocation cannot erase information already viewed, downloaded or copied.
+9. Offline Emergency QR
+Store patient-selected allergies, important conditions, medications and emergency contacts.
+Generate a QR containing a minimal emergency profile.
+Support scanning without internet by encoding the selected data directly in the QR.
+Provide a printable emergency card.
+Show the last-updated date and information verification status.
+Allow the owner to update or replace the QR.
+Offline QR data can be copied and cannot be remotely revoked once copied. Do not put the full medical vault in the code.
+10. AI Medical Document Summarisation
+Summarise lengthy medical reports in plain language.
+Extract test names, values, units and stated reference ranges.
+Flag values outside the ranges printed in the report.
+Compare reports from different dates.
+Link explanations to source documents and pages.
+Flag uncertain or missing information.
+Generate patient-reviewed consultation summaries.
+AI explanations are informational, not diagnoses.
+11. RxScript Intelligence — Handwritten Prescription OCR
+Scan handwritten or printed prescriptions.
+Preprocess images using OCR and image-processing models.
+Extract candidate medicine names, strengths and written instructions.
+Display uncertainty and possible alternative readings.
+Show extracted text alongside the original prescription.
+Let users review and correct the results.
+Save confirmed information and retrieve earlier prescriptions.
+Uncertain medicine names, strengths and dosages must not be silently guessed. Handwriting recognition needs evaluation against labelled samples.
+12. Medicine Information Lookup
+Search by medicine name or supported product identifier.
+Show available ingredients, strengths and formulations from reference sources.
+Compare prescription candidates with reference information.
+Flag discrepancies for review.
+A database match does not prove that a physical medicine package is genuine.
+13. Personal AI Health Chatbot
+A patient-specific assistant that searches authorised information in the patient's profile and health records.
+Answer questions about previous reports, recorded medicines, allergies and appointments.
+Compare historical reports.
+Explain medical terminology in simple language.
+Find relevant records using natural-language questions.
+Link answers to source documents, dates and passages.
+Acknowledge missing, conflicting or uncertain information.
+Prepare medical-history summaries for patient review.
+Use retrieval-augmented generation (RAG), not an unrestricted prompt containing every record. The chatbot must not invent history, diagnose conditions or change prescriptions.
+14. Multilingual Voice Assistant
+Speak questions in English, Hindi or Telugu.
+Convert speech into text.
+Read answers, report explanations and reminders aloud.
+Support typing and voice interchangeably.
+Follow the patient's selected language.
+Retrieve the patient's own records after authentication.
+Example: “నా చివరి రిపోర్ట్‌లో ఏముంది?” — “What is in my last report?”
+15. Full Website Language Switching
+English, हिन्दी and తెలుగు selectors in the header and settings.
+Translate navigation, buttons, forms, notifications and help text.
+Save the language preference.
+Match chatbot responses and voice output to the chosen language.
+Support readable fonts and accessible layouts.
+The entire website interface must change language, not just the AI assistant.
+16. Appointment Management and Reminders
+Create, reschedule and cancel appointments.
+Display upcoming and past visits.
+Schedule reminders through configured backend services.
+Store doctor and clinic details.
+Let the chatbot retrieve appointment dates.
+Save patient-recorded follow-up instructions.
+17. AI Diet and General Health Guidance
+Meal suggestions based on food preferences.
+Vegetarian and non-vegetarian plans.
+Consider recorded allergies and dietary restrictions.
+Weekly meal plans and grocery lists.
+General nutrition education.
+Do not present generic AI meal plans as a substitute for clinician-directed diets.
+18. Smart Health Timeline, Consultation Brief and Security Audit
+Chronological record history and semantic search.
+Search by date, category, doctor or document content.
+Compare recorded values where appropriate.
+Build a consultation brief from patient-selected records.
+Show who accessed which shared records and when.
+Enforce server-side permissions, private storage, database Row-Level Security and deletion workflows.
+Test access denial for unshared, expired and revoked documents.
+Family relationships and doctor roles never override individual record permissions.
+19. Family account and permissions model
+The new family feature needs to work with Aegis Care's patient-ownership principle.
+User
+Permissions
+Adult patient
+Controls their own health records and sharing consent
+Family member
+Accesses their own profile and records
+Parent or authorised guardian
+Manages permitted dependant profiles as appropriate
+Doctor
+Sees only records explicitly shared with their verified account
+Aegis Care administrator
+Manages accounts and verification; does not automatically receive unrestricted medical-record access
+Face verification is an authentication mechanism, not a medical-record permission. A match must not automatically expose another person's health history, even when family members share one household.
+20. Recommended technology stack
+Layer
+Technology
+Frontend
+Next.js, React, TypeScript, Tailwind CSS
+UI components
+shadcn/ui
+Website translations
+next-intl
+Backend
+Python + FastAPI
+Database
+Supabase PostgreSQL
+Authentication
+Supabase Auth + passkeys where supported
+Face verification
+Evaluated face-verification model and liveness solution
+OTP
+Verified email/SMS provider or authentication service
+Private documents
+Supabase Storage
+PDF extraction
+PyMuPDF
+OCR and preprocessing
+PaddleOCR + OpenCV
+Handwriting recognition
+Evaluate TrOCR or suitable vision-language models
+Patient-specific chatbot
+LLM API + RAG
+Semantic search
+Embeddings + pgvector
+Voice assistant
+Multilingual speech-to-text and text-to-speech
+QR generation
+Python qrcode or equivalent
+QR scanning
+html5-qrcode or native camera scanning
+Reminders
+Scheduled backend jobs
+Testing
+Pytest + frontend tests
+Keep API keys on the server, protect biometric templates as sensitive data, and avoid collecting or retaining raw face images unnecessarily. For real deployment, evaluate consent, retention, security, bias and applicable privacy requirements before enabling face verification.
+21. Final development roadmap
+Phase 1
+Secure foundation
+Accounts, patient profiles, document uploads, family membership and private storage.
+Phase 2
+Authentication and sharing
+Passkeys, optional face verification with OTP fallback, doctor verification, QR consent, OPD/admission, expiry and revocation.
+Phase 3
+AI health memory
+OCR, source-linked summaries, patient-specific chatbot, semantic search and consultation briefs.
+Phase 4
+Multilingual accessibility
+Full English/Hindi/Telugu website translation, speech recognition and spoken responses.
+Phase 5
+Advanced modules
+Offline emergency QR, evaluated handwriting OCR, medicine lookup, appointments and diet assistant.
+Final project identity
+Aegis Care is a patient-controlled healthcare platform designed to help people organise, understand and securely share their medical history. It combines personal AI health memory, family profiles, optional face authentication, multilingual interaction, emergency information and consent-based doctor access.
+For your hackathon, demonstrate the most important journey end to end using synthetic patient records: authenticate, upload a report, ask the chatbot a question, switch to Telugu, approve a doctor's QR request for selected documents, and prove that expired or revoked access is denied. Demonstrate the offline emergency QR separately without an internet connection.
+Your records. Your consent. Your control.
+BROOO 🔥🛡️ Aegis Care’s feature list is now locked as your project baseline. We’ll treat these as the agreed final features for your hackathon/MVP, and use the stack below as the technical blueprint. If you later want to change a feature, we can revise the baseline deliberately instead of constantly expanding the scope.
+Aegis Care — Final Product Blueprint
+HIPAA Screenshot Sharing in 2026: PHI Rules, Fines & Redaction
+Aegis Care
+Your Health. Your Authority. Your Shield.
+A patient-controlled health record platform to organise medical records, understand them with AI, manage family profiles and securely share selected information with doctors.
+1. Locked feature list
+18 core modules · Final agreed scope
+A. Accounts, records and security
+MediCloud | Devpost
+1. Smart Medical Record Vault
+Upload and organise reports, prescriptions, scans and other medical documents; search and view past records.
+2. Secure Authentication and Session Management
+Login, logout, protected sessions, account recovery and role-aware permissions.
+3. Family Face Authentication + OTP Fallback
+Optional camera-based face verification for enrolled family members, with explicit camera permission, liveness checks where supported, and OTP/passkey fallback.
+4. Unauthorised-Access Detection and Alerts
+Detect suspicious login and access patterns, log security events and notify the account holder.
+5. Doctor Verification System
+Doctor registration, credential review and clearly labelled verification status.
+6. QR-Based Secure Medical Sharing
+Doctors request access using a short-lived QR request; patients approve specific records, purpose and duration.
+7. OPD and Admission Toggle
+Separate consultation and admission sharing flows with different patient-selected scopes.
+8. Limited-Time Access and Consent Management
+View active grants, expiry times and access history; revoke future access.
+9. Offline Emergency QR
+A QR card containing only patient-selected essential emergency information, readable offline when the data is encoded directly in the QR.
+B. AI and medical intelligence
+10. AI Medical Document Summarisation
+Explain reports in plain language, retain links to original pages and flag uncertainty.
+11. RxScript Intelligence — Handwritten Prescription OCR
+Extract candidate medicine names and instructions, show confidence and require user review before saving.
+12. Medicine Information Lookup
+Display reliable reference information for identified medicines; avoid changing or prescribing doses.
+13. Personal AI Health Chatbot
+Answer questions about the authenticated patient's own records with supporting document references.
+14. Multilingual Voice Assistant
+Voice input and spoken responses in English, Hindi and Telugu, depending on provider support and accuracy.
+15. Full Website Language Switching
+Translate the entire interface—not only the chatbot—into English, Hindi and Telugu.
+C. Daily health management
+16. Appointment Management and Reminders
+Record appointments, consultation details and reminder preferences.
+17. AI Diet and General Health Guidance
+General wellness suggestions with appropriate cautions for allergies, medical conditions and clinician-prescribed diets.
+18. Smart Health Timeline, Consultation Brief and Security Audit
+See health events chronologically, prepare a patient-approved doctor summary and inspect access history.
+Scope rule: These 18 modules are locked as the intended product features. For the first demo, some can be implemented as basic but working versions while advanced capabilities—especially face verification, handwriting OCR and multilingual voice—are integrated progressively. A feature should not be presented as fully implemented until it works.
+2. Recommended tech stack — detailed
+My recommendation is a TypeScript + Next.js frontend, Python FastAPI backend, and Supabase PostgreSQL database. This gives you a modern web app, Python's AI/OCR ecosystem, and a practical path from hackathon prototype to a more robust product.
+Aegis Care architecture
+Frontend — Next.js + React + TypeScript
+Patient dashboard · Doctor portal · Family profiles · Mobile-friendly web app
+HTTPS · authenticated requests
+Backend — Python FastAPI
+Authentication checks · Consent engine · Medical APIs · AI orchestration · Audit logs
+Server-side authorization on every protected request
+Supabase PostgreSQL
+Users, records metadata, consent, family relationships, audit events
+Private file storage
+PDFs, scans, reports and prescription images
+AI + OCR services
+Report explanations, retrieval, handwriting and speech processing
+Background jobs
+Expiry enforcement, appointment reminders and security alerts
+3. The exact technology choices
+Recommended stack for the first version; not every service needs to be built on day one.
+1. Frontend: Next.js + React + TypeScript
+Purpose: Build the entire patient and doctor web experience.
+UI: Tailwind CSS + shadcn/ui.
+Forms: React Hook Form + Zod validation.
+Charts: Recharts for health trends and timelines.
+QR scanning: html5-qrcode or an equivalent maintained browser library.
+Why: Reusable components, strong TypeScript support, responsive layouts and straightforward API integration.
+Use it for: Medical vault, dashboard, consent screens, family profiles, appointment calendar and chatbot.
+2. Backend: FastAPI + Python
+Purpose: Central application API and security enforcement.
+Validation: Pydantic.
+Database access: SQLAlchemy or SQLModel with Alembic migrations.
+Authentication: Validate Supabase-issued access tokens on the server.
+API documentation: FastAPI's OpenAPI documentation.
+Why: Python integrates well with OCR, document processing, embeddings and AI models.
+Example API groups: /auth, /records, /family, /doctors, /consent, /qr, /chat, /prescriptions, /appointments, /audit.
+3. Database: Supabase + PostgreSQL
+Purpose: Store structured health data and application state.
+Authentication: Supabase Auth.
+Database: PostgreSQL.
+Semantic search: pgvector.
+Permissions: PostgreSQL Row-Level Security (RLS) as defense-in-depth, alongside backend authorization.
+Why: One integrated platform for the database, user authentication and file storage.
+Keep large PDFs and images in private object storage; store their metadata and ownership in PostgreSQL.
+4. File storage: Supabase Storage
+Purpose: Private storage for uploaded PDFs, scans and prescription photographs.
+Use private buckets, file-type and size validation, random object keys and server-enforced access.
+Deliver files only after authorization, using short-lived signed URLs when appropriate.
+Never store sensitive documents in public buckets or expose permanent public links.
+If the project later needs larger-scale document processing, you can evaluate another private object-storage provider without redesigning the whole product.
+5. AI: one LLM API + retrieval-augmented generation (RAG)
+Purpose: Explain medical reports, answer questions about the patient's own history and generate consultation briefs.
+Framework: Start with direct API calls and simple Python orchestration; introduce LangChain or LlamaIndex only if it simplifies the workflow.
+Embeddings: A suitable embedding model, with vectors stored in pgvector.
+Grounding: Retrieve only the relevant, authorised records; cite the document, date and page or passage.
+Quality checks: Validate extracted values, flag missing information and prevent unsupported answers from appearing as facts.
+Important: The LLM does not get unrestricted access to the whole database. The backend authorizes retrieval before any relevant content is sent to the AI provider.
+6. Document processing: PyMuPDF + OpenCV + PaddleOCR
+PyMuPDF: Extract text from text-based PDFs and render pages for inspection.
+OpenCV: Image cleanup, rotation correction, contrast enhancement and preprocessing.
+PaddleOCR: OCR for printed text and suitable scanned documents.
+Handwriting: Evaluate TrOCR or a vision-language model against a set of representative handwritten prescriptions.
+Output: Store extracted candidates, confidence, source page and user-confirmed values.
+Never silently guess an unclear medicine, strength or dose. Show the original image alongside the extracted text.
+7. Language and voice: next-intl + evaluated STT/TTS provider
+next-intl for full website translations.
+A multilingual speech-to-text service for spoken questions.
+A text-to-speech service with tested English, Hindi and Telugu voices.
+Language preference saved in the user profile.
+Test real pronunciation, medical terminology and speech recognition accuracy before selecting a provider.
+Keep the website translation system separate from the voice service so you can replace either independently.
+8. Authentication and family verification
+Base authentication: Supabase Auth with email/phone verification as appropriate.
+Stronger sign-in: WebAuthn/passkeys where supported.
+OTP: A configured authentication provider; never implement OTP verification as a frontend-only check.
+Face verification: A separately evaluated face-verification and liveness solution, with explicit camera permission and a non-biometric fallback.
+Family access: Explicit family membership and individual permissions, not one shared family password.
+Face matching is an optional verification step, not automatic permission to open every family member's medical records.
+9. QR sharing and consent engine
+Python qrcode for QR creation.
+html5-qrcode or a comparable maintained library for browser scanning.
+Random, opaque, short-lived request identifiers.
+PostgreSQL tables for access grants, selected records, purpose, expiry and revocation.
+Server-side permission checks every time a doctor requests a record.
+The QR code must not contain a patient's medical records, permanent access token or reusable secret. A patient approval creates a scoped grant tied to the verified doctor's account.
+10. Background jobs and notifications
+Start with a managed scheduler or scheduled backend worker.
+Add a queue such as Redis-backed jobs only when workload warrants it.
+Send appointment reminders and suspicious-access alerts through a configured email/SMS provider.
+Enforce expiry in the API/database authorization logic, not only through a scheduled job.
+Use retry handling and idempotent jobs to avoid duplicate notifications.
+11. Testing, deployment and monitoring
+Backend tests: Pytest.
+Frontend tests: Vitest and React Testing Library.
+End-to-end: Playwright.
+Frontend deployment: Vercel or another suitable Next.js host.
+Backend deployment: A managed Python application host or container platform.
+CI/CD: GitHub Actions.
+Monitoring: Error tracking and privacy-conscious application logs.
+Test expired and revoked QR grants, cross-patient data access, failed authentication, private file downloads and AI responses with missing source information.
+4. Database design — the foundation of Aegis Care
+Do not put every piece of information into one giant users table. Build related tables with clear ownership and permissions.
+Table
+What it stores
+profiles
+Patient identity details and preferences
+family_memberships
+Family relationships, roles and authorised scopes
+medical_records
+Record metadata, type, owner, date and storage reference
+record_extractions
+Extracted text and user-confirmed structured values
+prescriptions
+Prescription details and review status
+doctors
+Doctor profiles and credential-verification status
+consent_requests
+Pending QR sharing requests, purpose and requested scope
+access_grants
+Approved doctor, allowed records, start/expiry and revocation
+access_audit_logs
+Access attempts, actions, timestamps and outcomes
+appointments
+Appointment time, provider and reminder preferences
+health_events
+Timeline entries and links to supporting records
+emergency_profiles
+Patient-selected emergency information and update date
+chat_sessions
+Conversation metadata and user-selected preferences
+document_chunks
+Searchable document passages and embedding references
+Four database rules you should not compromise on
+Every record has an owner. Every query must respect the authenticated user and any explicitly granted family or doctor access.
+Consent is a real permission record. A QR scan is not itself permission to read medical data.
+Revocation is enforced on the server. Expired or revoked grants must fail on the next protected request.
+Audit logs are protected. Users with ordinary permissions must not be able to rewrite or erase their own security history.
+For a real healthcare deployment, add a threat model, backup and recovery procedures, retention/deletion policies, vendor security review and appropriate legal/privacy review. A prototype using these technologies is not automatically compliant with any particular healthcare law or standard.
+5. How each locked feature maps to the stack
+Feature
+Main implementation
+1. Medical vault
+Next.js, FastAPI, PostgreSQL, private storage
+2. Secure login
+Supabase Auth, server-side token validation
+3. Face + OTP
+Camera permission, face/liveness service, OTP provider
+4. Access alerts
+Audit events, detection rules, notification provider
+5. Doctor verification
+Doctor profiles, review workflow, verification evidence
+6. QR sharing
+QR library, consent API, scoped grants
+7. OPD/admission
+Consent engine and patient-selected scopes
+8. Limited-time access
+Expiry/revocation logic, server-side checks
+9. Offline emergency QR
+Compact emergency payload, QR generator, printable card
+10. AI summaries
+PDF extraction, LLM, source-linked summaries
+11. Handwriting OCR
+OpenCV, OCR engine, handwriting model evaluation
+12. Medicine lookup
+Trusted medicine reference source and matching logic
+13. Personal chatbot
+RAG, embeddings, pgvector, LLM
+14. Voice assistant
+Speech-to-text, text-to-speech
+15. Language switching
+next-intl, translated content and UI strings
+16. Appointments
+PostgreSQL, scheduler, notifications
+17. Diet guidance
+LLM with bounded general-wellness guidance
+18. Timeline, brief and audit
+Health events, report references, consent-approved export and audit API
+6. The build order I recommend
+Don't attempt to build all 18 modules simultaneously. This sequence gives you a working, demonstrable product early.
+01
+Secure core
+Build the UI, login, database schema, private document upload, patient profiles and server-side authorization.
+Build first
+02
+Patient-controlled sharing
+Implement doctor accounts, verification status, QR requests, explicit consent, limited-time grants, revocation and audit history.
+03
+AI health memory
+Add PDF extraction, report summaries, source-linked chatbot responses, medical timeline and consultation briefs.
+04
+Language and daily tools
+Add full UI translations, voice interaction, appointments, reminders and general wellness guidance.
+05
+Advanced modules
+Add offline emergency QR, handwriting OCR, optional family face verification, medicine lookup and enhanced security alerts.
+7. Project structure
+A monorepo keeps your frontend and backend organised in one Git repository.
+aegis-care/├── apps/│ └── web/ # Next.js + TypeScript│ ├── app/│ ├── components/│ ├── features/│ ├── messages/ # English, Hindi, Telugu│ └── lib/├── services/│ └── api/ # FastAPI│ ├── routers/│ ├── services/│ ├── security/│ ├── schemas/│ └── main.py├── ai/│ ├── retrieval/│ ├── summarisation/│ ├── ocr/│ └── evaluation/├── database/│ ├── migrations/│ └── seeds/├── tests/│ ├── integration/│ └── e2e/├── docs/│ ├── architecture.md│ └── threat-model.md├── .env.example└── README.md
+Keep API keys and service credentials in server-side environment variables. The .env.example file should contain only placeholder names, never actual secrets.
+8. What you should actually build for the hackathon demo
+If time is limited, prioritise this complete end-to-end journey:
+Sign in to a synthetic patient account and upload a sample blood report.
+Ask the personal chatbot to explain the report and show the source page for its answer.
+Switch the website to Telugu and ask a question about the same record.
+Use a doctor account to generate a QR access request.
+Approve only one selected document for a limited period, then demonstrate that an expired or revoked grant is denied.
+Show an emergency QR working in airplane mode, with only the selected emergency information encoded.
+That demo proves the product's most important idea: AI makes health information understandable, while the patient remains in control of who can access it.
+My strongest recommendation is to make Next.js + FastAPI + Supabase + one carefully selected AI provider your fixed starting stack. Keep face verification, advanced handwriting OCR and voice as modular services so they don't delay the secure core.
+BROOO 🔥🛡️ Let's turn Aegis Care into a properly structured, buildable project in Antigravity—not a collection of disconnected features.
+We'll use the stack we locked in:
+Frontend: Next.js + React + TypeScript + Tailwind CSS
+Backend: Python + FastAPI
+Database, authentication and file storage: Supabase
+AI: LLM API + RAG + pgvector
+OCR: PyMuPDF + OpenCV + PaddleOCR, with a separate handwriting-OCR evaluation
+Languages: English, Hindi and Telugu
+Testing: Pytest + frontend tests + Playwright
+The architecture below keeps patient data, access permissions and AI processing separated, so each feature can be developed and tested without rewriting the entire application.
+1. Final Aegis Care architecture
+Presentation layer — Next.js
+Patient portal · Doctor portal · Family profiles · Admin review portal
+UI · Form validation · Language switching · QR scanner · Camera permission UI
+HTTPS + authenticated access token
+Application layer — FastAPI
+Authentication verification · Authorization · Consent · Medical records · Doctor access
+AI orchestration · OCR orchestration · Audit logging · Reminders · Expiry checks
+PostgreSQL
+Profiles, records metadata, consent grants, appointments and audit events
+Private storage
+PDFs, reports, prescription images and other uploads
+AI / RAG
+Source-linked summaries, patient-specific chat and consultation briefs
+Document intelligence
+PDF extraction, OCR, review and confirmed structured data
+External providers — called only through the backend
+LLM API · Embedding model · Email/SMS OTP and notifications · Optional face verification/liveness · Speech-to-text and text-to-speech
+The most important architectural rule
+The frontend never decides who is allowed to see a medical record. It can request access, but FastAPI must verify the authenticated user, ownership or approved grant, record scope, expiry and revocation on every protected request.
+The AI system must use the same permissions: retrieve only records the current user is authorised to access, and only then send relevant content to the configured AI provider.
+2. Final folder structure to create in Antigravity
+Create one root project folder named aegis-care. Inside it, use a monorepo structure with separate frontend, backend, database and AI modules.
+aegis-care/
+The main workspace to open in Antigravity
+Copy name
+Create these directories and files inside the root. The tree is the target structure; you don't need to create every placeholder file immediately.
+aegis-care/│├── AGENTS.md├── README.md├── .gitignore├── .env.example├── docker-compose.yml│├── apps/│ └── web/ # Next.js frontend│ ├── public/│ │ ├── images/│ │ └── icons/│ ├── messages/│ │ ├── en.json│ │ ├── hi.json│ │ └── te.json│ ├── src/│ │ ├── app/│ │ │ ├── \[locale\]/│ │ │ │ ├── (public)/│ │ │ │ │ ├── page.tsx│ │ │ │ │ └── login/│ │ │ │ ├── (patient)/│ │ │ │ │ ├── dashboard/│ │ │ │ │ ├── records/│ │ │ │ │ ├── family/│ │ │ │ │ ├── timeline/│ │ │ │ │ ├── ai-assistant/│ │ │ │ │ ├── appointments/│ │ │ │ │ ├── emergency-card/│ │ │ │ │ ├── sharing/│ │ │ │ │ └── settings/│ │ │ │ ├── (doctor)/│ │ │ │ │ ├── dashboard/│ │ │ │ │ ├── requests/│ │ │ │ │ └── shared-records/│ │ │ │ └── (admin)/│ │ │ │ ├── dashboard/│ │ │ │ ├── doctor-review/│ │ │ │ └── security-events/│ │ │ ├── api/ # Only if a web-side route is needed│ │ │ ├── layout.tsx│ │ │ └── globals.css│ │ ├── components/│ │ │ ├── ui/│ │ │ ├── layout/│ │ │ ├── records/│ │ │ ├── sharing/│ │ │ ├── charts/│ │ │ └── forms/│ │ ├── features/│ │ │ ├── auth/│ │ │ ├── medical-records/│ │ │ ├── family/│ │ │ ├── doctor-verification/│ │ │ ├── consent/│ │ │ ├── qr-sharing/│ │ │ ├── emergency-qr/│ │ │ ├── ai-chat/│ │ │ ├── prescriptions/│ │ │ ├── medicine-lookup/│ │ │ ├── appointments/│ │ │ ├── health-timeline/│ │ │ ├── voice/│ │ │ ├── security/│ │ │ └── wellness/│ │ ├── hooks/│ │ ├── lib/│ │ │ ├── api-client.ts│ │ │ ├── supabase/│ │ │ ├── validation/│ │ │ └── utils/│ │ ├── types/│ │ └── middleware.ts│ ├── next.config.ts│ ├── package.json│ └── tsconfig.json│├── services/│ └── api/ # FastAPI backend│ ├── app/│ │ ├── main.py│ │ ├── core/│ │ │ ├── config.py│ │ │ ├── security.py│ │ │ ├── logging.py│ │ │ └── exceptions.py│ │ ├── api/│ │ │ ├── deps.py│ │ │ └── v1/│ │ │ ├── router.py│ │ │ └── endpoints/│ │ │ ├── profiles.py│ │ │ ├── records.py│ │ │ ├── family.py│ │ │ ├── doctors.py│ │ │ ├── consent.py│ │ │ ├── qr_sharing.py│ │ │ ├── emergency.py│ │ │ ├── ai_chat.py│ │ │ ├── summaries.py│ │ │ ├── prescriptions.py│ │ │ ├── medicines.py│ │ │ ├── appointments.py│ │ │ ├── timeline.py│ │ │ ├── notifications.py│ │ │ └── audit.py│ │ ├── models/ # Database models│ │ ├── schemas/ # Request/response validation│ │ ├── repositories/ # Database queries│ │ ├── services/ # Business logic│ │ ├── policies/ # Ownership and access rules│ │ ├── integrations/│ │ │ ├── supabase.py│ │ │ ├── llm_provider.py│ │ │ ├── notification_provider.py│ │ │ └── speech_provider.py│ │ └── workers/│ │ ├── expiry_worker.py│ │ └── reminder_worker.py│ ├── tests/│ │ ├── unit/│ │ ├── integration/│ │ └── security/│ ├── pyproject.toml│ └── Dockerfile│├── packages/│ └── contracts/ # Shared API specifications│ ├── openapi/│ └── README.md│├── ai/│ ├── ingestion/│ │ ├── pdf_extractor.py│ │ ├── image_preprocessor.py│ │ └── ocr_pipeline.py│ ├── summarisation/│ │ ├── report_summary.py│ │ └── source_validation.py│ ├── retrieval/│ │ ├── chunking.py│ │ ├── embeddings.py│ │ └── retriever.py│ ├── prescriptions/│ │ ├── extraction.py│ │ └── review.py│ ├── evaluation/│ │ └── test_cases/│ └── README.md│├── database/│ └── supabase/│ ├── config.toml│ ├── migrations/│ ├── seed.sql│ └── tests/│├── tests/│ └── e2e/│└── docs/├── architecture.md├── database-schema.md├── api-contracts.md├── threat-model.md├── consent-and-access.md└── deployment.md
+What belongs where?
+apps/web/ — all pages, UI, language switching and browser interactions.
+services/api/ — the only central place for application business rules and sensitive access decisions.
+ai/ — reusable document processing and AI pipelines. The API calls these modules; they do not independently grant access to data.
+database/supabase/ — version-controlled schema migrations, access policies, test data and database tests.
+packages/contracts/ — shared API contracts so frontend and backend agree on request and response formats.
+docs/ — the design decisions and rules Antigravity should follow.
+AGENTS.md — project-wide instructions for the coding agent.
+Important: Don't duplicate the whole backend inside Next.js API routes. Keep the FastAPI service as the main backend. Use Next.js routes only for specific frontend/BFF needs, if required.
+3. Create the project in Antigravity step by step
+Follow this order. Do not ask Antigravity to generate all 18 features in one prompt. That often leads to missing files, inconsistent APIs, fake integrations and UI that looks complete but doesn't work.
+Step 1 — Create the workspace
+Create a folder named aegis-care on your computer.
+Open Antigravity and open that folder as the workspace.
+Open its integrated terminal.
+Check that Node.js, npm, Python and Git are installed.
+Create the Git repository before making large changes.
+Run:
+git init
+Create the Next.js application inside apps/web using the official Next.js project setup, with TypeScript, App Router and Tailwind CSS enabled. Create the Python environment and FastAPI project inside services/api. Set up Supabase separately and connect its project credentials through environment variables.
+You can ask Antigravity to perform the setup, but review the commands and files it creates rather than blindly accepting every generated change.
+Step 2 — Add project-wide instructions
+Create AGENTS.md in the root folder. This tells Antigravity how the project should be built and what it must not compromise.
+Aegis Care — Agent Instructions
+Aegis Care — Agent Instructions
+Product
+Aegis Care is a patient-controlled health record platform.
+Tagline: "Your Health. Your Authority. Your Shield."
+The locked scope contains 18 modules: medical record vault, authentication, family face verification with OTP fallback, access alerts, doctor verification, QR sharing, OPD/admission sharing, consent expiry and revocation, offline emergency QR, AI report summaries, prescription OCR, medicine information lookup, personal AI chatbot, multilingual voice assistant, full website translations, appointments, general wellness guidance, and health timeline/consultation brief/audit.
+Required architecture
+Frontend: Next.js, React, TypeScript, Tailwind CSS.
+Backend: Python FastAPI.
+Database and authentication: Supabase Auth and PostgreSQL.
+Documents: private Supabase Storage.
+AI retrieval: embedding model and pgvector where appropriate.
+OCR: PyMuPDF, OpenCV, PaddleOCR; evaluate handwriting-specific models separately.
+Languages: English, Hindi, Telugu.
+Testing: Pytest, frontend unit tests, Playwright end-to-end tests.
+Architecture rules
+Keep the frontend in apps/web and the main backend in services/api.
+Keep reusable AI/document processing in ai/.
+Keep SQL migrations and database policies in database/supabase/.
+Use versioned API endpoints under /api/v1.
+Separate API endpoints, business services, repositories, schemas, models and access policies.
+Prefer small, testable modules over giant files.
+Do not add new frameworks or providers without explaining why they are needed.
+Security rules
+Every protected request must authenticate the user and authorize the requested action server-side.
+Verify token signatures and claims; never trust a user ID or role sent by the browser.
+Enforce record ownership, family permissions, doctor grants, allowed scope, expiry and revocation.
+Use private file storage and check permissions before generating access URLs.
+Never expose service-role keys, LLM keys, OTP secrets or other private credentials to the frontend.
+Do not log medical document content, OTP values, access tokens or face templates.
+Face verification requires explicit camera permission, appropriate consent and a fallback. A face match alone must not grant access to all family records.
+QR codes must not contain medical records or permanent reusable access tokens.
+Revoked or expired access must be denied by the backend, even if the UI is stale.
+Keep audit events protected from ordinary user modification.
+Use synthetic data in development and demos.
+AI and medical safety
+Retrieve only data the current user is authorised to access.
+Cite source documents and page references when available.
+Clearly flag uncertainty, missing values and conflicting information.
+Never invent medicine names, doses, diagnoses or patient history.
+OCR output is a candidate extraction until reviewed and confirmed.
+AI must not automatically change medication, make definitive diagnoses or share records with a doctor.
+Do not claim regulatory compliance, clinical validation or verified credentials without evidence.
+Engineering rules
+Validate all inputs on the server.
+Add tests for each feature and especially for access-control failures.
+Maintain .env.example with placeholder values only.
+Update README.md and relevant docs when architecture changes.
+Do not mark a feature complete unless its core flow works and tests pass.
+Before adding a dependency, check whether an existing dependency can do the job.
+Make small changes, run relevant tests, inspect errors, and report what changed.
+Do not replace working files or restructure the entire repository without a clear reason and explicit review.
+Development priority
+Foundation and authentication.
+Medical records and private storage.
+Consent-based doctor sharing and audit.
+AI summaries and patient-specific retrieval.
+Multilingual interface and appointments.
+Advanced OCR, voice, face verification and remaining modules.
+Step 3 — Create the environment variable templates
+Keep .env.example in the root for documentation and maintain separate local environment files for the frontend and backend.
+# apps/web/.env.local
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+# services/api/.env
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+DATABASE_URL=
+LLM_API_KEY=
+EMBEDDING_API_KEY=
+OTP_PROVIDER_API_KEY=
+NOTIFICATION_PROVIDER_API_KEY=
+# Optional, only when integrating these features
+FACE_VERIFICATION_API_KEY=
+SPEECH_TO_TEXT_API_KEY=
+TEXT_TO_SPEECH_API_KEY=
+These are variable names, not actual credentials. Use only the variables required by the providers you select.
+The Supabase service-role key and all AI, OTP and notification provider secrets must remain server-side. Never add private credentials to NEXT_PUBLIC_ variables, commit .env files, or put real patient records into test fixtures.
+For local development, use separate development credentials and synthetic patient data.
+4. Build Antigravity in these phases
+Copy and submit each prompt separately. Wait for Antigravity to finish, inspect the changes, and run the tests before moving to the next phase.
+Antigravity prompt sequence
+Select a phase, then copy its prompt into Antigravity.
+01
+Foundation and architecture
+Generate the repository structure, Next.js app, FastAPI app, environment configuration, health check and documentation.
+02
+Design system and dashboard
+Create the responsive application shell, navigation, accessible components and dashboard using synthetic data.
+03
+Authentication and private records
+Connect Supabase, protect user records, and implement upload, listing, preview and deletion with server checks.
+04
+Consent and QR sharing
+Build doctor accounts, verification status, patient consent, scoped grants, expiry, revocation and audit.
+05
+AI summaries and health chatbot
+Add document extraction, source-linked summaries and authorised retrieval from patient records.
+06
+Remaining modules
+Add family management, face/OTP flow, emergency QR, prescription review, languages, voice, appointments and wellness.
+07
+End-to-end verification
+Test the complete patient journey, permissions, deployment settings and failure scenarios.
+Phase 01: Foundation and architecture
+Read AGENTS.md and follow it strictly. Set up the Aegis Care monorepo using the approved architecture. Configure apps/web as Next.js App Router with TypeScript and Tailwind CSS. Configure services/api as a Python FastAPI application with versioned /api/v1 routing, Pydantic settings and a health endpoint. Add .gitignore, safe .env.example files, initial README.md and docs/architecture.md. Do not implement all product features yet. Do not put secrets in code. Run available frontend and backend checks and report the files created, commands run, failures and next steps.
+Copy this phase's prompt
+5. Backend API groups
+Keep the backend API organised and versioned. These are the planned endpoint groups; create individual endpoints as each module is implemented.
+API group
+Responsibilities
+/api/v1/profiles
+Patient profile and preferences
+/api/v1/family
+Family memberships and permitted dependent access
+/api/v1/records
+Upload, list, retrieve and manage medical records
+/api/v1/doctors
+Doctor profiles and verification workflow
+/api/v1/consent
+Consent requests, approved scopes and revocation
+/api/v1/qr
+QR request creation and patient approval workflow
+/api/v1/emergency
+Selected emergency information and QR generation
+/api/v1/summaries
+Report extraction and source-linked summaries
+/api/v1/chat
+Authorised record retrieval and AI conversation
+/api/v1/prescriptions
+OCR candidates, review and confirmed prescription details
+/api/v1/medicines
+Medicine reference information
+/api/v1/appointments
+Scheduling and reminders
+/api/v1/timeline
+Health events and consultation briefs
+/api/v1/notifications
+Notification preferences and delivery status
+/api/v1/audit
+Access history and security events
+Do not create all of these as empty endpoints and mark them complete. Implement each API when its underlying feature is ready.
+6. Final rules before you start coding
+One source of truth: Supabase/PostgreSQL stores application data; private storage holds the documents.
+One central permission layer: FastAPI authorizes access to records, AI retrieval and doctor sharing.
+One feature at a time: Build the UI, API, database changes and tests together.
+No fake security: Hiding a button, displaying an expiry timer or scanning a QR is not access control.
+No fake AI: Clearly label mock responses and demo data until the actual provider and retrieval pipeline work.
+No uncontrolled scope growth: Finish the current phase before adding extra libraries or unrelated features.
+Test with synthetic patients: Include at least two separate patient accounts and a doctor account so you can demonstrate both permitted and denied access.
+Your first action: create aegis-care, add AGENTS.md, open it in Antigravity and run Phase 01 only. Once the foundation runs successfully, move to the UI and then the secure medical-record flow. That is the most systematic way to turn the locked Aegis Care blueprint into a working product.
+Part B — Feature and Technology Audit
+This audit lists everything extracted from your document above. Nothing has been removed or replaced. Tags used from here on: [DOC] stated in your document; [INF] inferred from your document; [P] proposed decision where your document is silent.
+Naming note: your file is titled MEDIWALLET, while the body names the product “Aegis Care” and uses aegis-care as the repository name. This blueprint calls it MediWallet (Aegis Care) and keeps aegis-care as the repo/folder name exactly as you wrote it. See open question Q1.
+B1. Feature inventory (18 locked modules + 2 supporting models)
+ID
+Module (from your document)
+Group
+M01
+Smart Medical Record Vault
+A. Accounts, records and security
+M02
+Secure Authentication and Session Management
+A
+M03
+Family Face Authentication + OTP Fallback
+A
+M04
+Unauthorised-Access Detection and Alerts
+A
+M05
+Doctor Verification System
+A
+M06
+QR-Based Secure Medical Sharing
+A
+M07
+OPD and Admission Toggle
+A
+M08
+Limited-Time Access and Consent Management
+A
+M09
+Offline Emergency QR
+A
+M10
+AI Medical Document Summarisation
+B. AI and medical intelligence
+M11
+RxScript Intelligence — Handwritten Prescription OCR
+B
+M12
+Medicine Information Lookup
+B
+M13
+Personal AI Health Chatbot
+B
+M14
+Multilingual Voice Assistant
+B
+M15
+Full Website Language Switching
+B
+M16
+Appointment Management and Reminders
+C. Daily health management
+M17
+AI Diet and General Health Guidance
+C
+M18
+Smart Health Timeline, Consultation Brief and Security Audit
+C
+S19
+Family account and permissions model (supporting)
+Source section 19
+S20
+Recommended technology stack (supporting)
+Source section 20
+B2. Technology inventory (all [DOC])
+Layer
+Technology in your document
+Frontend
+Next.js (App Router), React, TypeScript, Tailwind CSS
+UI components / forms / charts
+shadcn/ui; React Hook Form + Zod; Recharts
+Website translations
+next-intl (English, Hindi, Telugu)
+Backend
+Python + FastAPI; Pydantic; SQLAlchemy or SQLModel with Alembic
+Database
+Supabase PostgreSQL; pgvector; Row-Level Security as defense in depth
+Authentication
+Supabase Auth; WebAuthn/passkeys where supported; OTP via a configured provider
+Face verification
+Separately evaluated face-verification and liveness solution (not yet chosen)
+Private documents
+Supabase Storage (private buckets, short-lived signed URLs)
+PDF / OCR
+PyMuPDF; OpenCV; PaddleOCR; TrOCR or a vision-language model to be evaluated for handwriting
+AI
+One LLM API + RAG; embeddings in pgvector; LangChain/LlamaIndex only if needed
+Voice
+Multilingual speech-to-text and text-to-speech provider (not yet chosen)
+QR
+Python qrcode; html5-qrcode or native camera scanning
+Background jobs
+Managed scheduler or scheduled backend worker; Redis queue only if workload warrants
+Testing
+Pytest; Vitest + React Testing Library; Playwright
+Deployment / CI
+Vercel (or another Next.js host); managed Python host or container platform; GitHub Actions
+Monorepo
+aegis-care/ with apps/web, services/api, ai, database/supabase, packages/contracts, tests/e2e, docs
+B3. Constraints and architectural decisions already in your document ([DOC])
+Frontend never decides access; FastAPI authorizes every protected request, including AI retrieval.
+Keep FastAPI as the main backend; do not duplicate it in Next.js API routes.
+Four database rules: every record has an owner; consent is a real permission record; revocation is enforced on the server; audit logs are protected.
+Build one feature at a time (UI, API, database changes and tests together); do not create empty endpoints and mark them complete.
+Features must not be presented as implemented until they work; mock AI and demo data must be labelled.
+Use synthetic data only; test with at least two patient accounts and one doctor account.
+Face verification, handwriting OCR and voice stay modular so they do not delay the secure core.
+B4. Stack decisions kept unchanged
+No change to your stack is recommended. Items your document leaves open (which LLM, which OTP provider, which STT/TTS provider, which face-verification solution, which medicine reference source, which hosts) are listed in Part F as open decisions.
+Part C — Customer Requirements Document (CRD)
+C1. Project overview and objectives
+Overview [DOC]: MediWallet (Aegis Care) is a patient-controlled healthcare platform that helps people organise, understand and securely share their medical history. It combines personal AI health memory, family profiles, optional face authentication, multilingual interaction, emergency information and consent-based doctor access.
+Objectives:
+Give patients ownership of their records: “Your records. Your consent. Your control.” [DOC]
+Make health information understandable through source-linked AI explanations. [DOC]
+Let patients share only selected records, for a limited time, with verified doctors. [DOC]
+Provide emergency information that works offline. [DOC]
+Be usable in English, Hindi and Telugu, by text and voice. [DOC]
+Deliver a working hackathon/MVP demo of the end-to-end journey using synthetic data. [DOC]
+C2. Stakeholders and target users
+Stakeholder
+Need
+Source
+Adult patient
+Organise records, control sharing, ask questions about own records
+[DOC]
+Family member
+Own profile and own records; optional face verification
+[DOC]
+Parent or authorised guardian
+Manage permitted dependant profiles
+[DOC]
+Doctor
+Request access; see only records explicitly shared with a verified account
+[DOC]
+Administrator
+Manage accounts and doctor verification; no automatic access to medical records
+[DOC]
+Hackathon judges / project owner (Mihika)
+See the complete demo journey working
+[DOC]/[INF]
+C3. Scope
+In scope: M01–M18 and the family permission model (S19), built on the stack in S20, delivered through the seven phases in Part E. Some modules may first be basic working versions; advanced capabilities (face verification, handwriting OCR, multilingual voice) are integrated progressively [DOC].
+Exclusions and limits stated in your document [DOC]: no secret camera activation or secret photographing of intruders; no medical data or permanent token inside sharing QR codes; no full medical vault inside the emergency QR; AI does not diagnose, change prescriptions or share records; no claim of regulatory compliance or clinical validation without evidence; medicine database matches do not prove a physical package is genuine; revocation cannot erase information already viewed, downloaded or copied; generic AI meal plans are not a substitute for clinician-directed diets.
+Proposed additional exclusions [P]: native mobile apps; payments or insurance claims; integration with hospital systems (HL7/FHIR); ordering or prescribing medicine.
+C4. Operational constraints and dependencies
+Required external accounts and providers: Supabase project; LLM and embedding API; OTP/notification provider; STT/TTS provider; optional face-verification/liveness service (all server-side keys only). [DOC]
+Hosting: Vercel or another Next.js host; managed Python host or container platform. [DOC]
+Development uses synthetic patient data and separate development credentials. [DOC]
+Real healthcare deployment needs a threat model, backup and recovery, retention and deletion policies, vendor security review and legal/privacy review. [DOC]
+C5. Requirements register
+Tag column: D = [DOC], I = [INF], P = [P].
+ID
+Requirement
+Module
+Tag
+CR-001
+Users can upload PDF, JPG and PNG files: reports, prescriptions, lab results, imaging reports, discharge summaries.
+M01
+D
+CR-002
+Records are organised by date, category, doctor and hospital; users can search, preview, download and manage them.
+M01
+D
+CR-003
+Originals are preserved; possible duplicates are detected; a chronological health timeline is maintained.
+M01
+D
+CR-004
+OCR processing status is tracked and users can correct extracted information.
+M01
+D
+CR-005
+Patient and doctor accounts with secure login, account recovery and session management.
+M02
+D
+CR-006
+Passkey (device biometric) sign-in where supported.
+M02
+D
+CR-007
+Rate limiting, login-attempt logging, session revocation and security alerts for suspicious activity.
+M02
+D
+CR-008
+Separate profiles for family members; enrolment images captured only with explicit consent.
+M03
+D
+CR-009
+Optional face verification against the enrolled profile, with liveness checks against photo/video replay.
+M03
+D
+CR-010
+OTP or passkey fallback when face verification fails, camera is unavailable or the user opts out; OTPs go to verified phone/email.
+M03
+D
+CR-011
+Face/OTP attempts are rate-limited; authentication events are logged and users notified of suspicious activity.
+M03
+D
+CR-012
+The website never activates the camera without permission and a stated purpose; a face match identifies an account only and grants no access to other members’ records.
+M03, S19
+D
+CR-013
+Biometric templates are treated as sensitive data; raw face images are not collected or retained unnecessarily.
+M03
+D
+CR-014
+Detect repeated failed logins and suspicious access patterns; temporarily restrict excessive attempts.
+M04
+D
+CR-015
+Maintain a security-event timeline; notify users; let users inspect and revoke active sessions.
+M04
+D
+CR-016
+The system never secretly photographs suspected intruders.
+M04
+D
+CR-017
+Doctors register and submit professional credentials; status is pending, verified or rejected.
+M05
+D
+CR-018
+Admins review credentials; verification timestamps are recorded.
+M05
+D
+CR-019
+Verification status is shown to the patient before approval; sensitive doctor functions are restricted until checks are complete; the badge reflects real verification only.
+M05
+D
+CR-020
+A doctor displays a short-lived QR access request.
+M06
+D
+CR-021
+The patient scans it, reviews doctor identity and verification status, chooses specific records, purpose and duration, and explicitly approves or rejects.
+M06
+D
+CR-022
+Access is bound to the intended doctor account; the backend checks permission on every protected request; the QR holds no medical records and no permanent token.
+M06
+D
+CR-023
+OPD mode: sharing OFF by default; selected documents shared for a temporary consultation; access expires automatically.
+M07
+D
+CR-024
+Admission mode: broader selection of relevant records; patient reviews and approves scope and duration; unselected records stay restricted; switching it ON never shares the whole database.
+M07
+D
+CR-025
+Patient chooses duration and purpose; the UI shows recipient, documents and expiry; grants expire automatically; expired or revoked access is rejected.
+M08
+D
+CR-026
+Patients can revoke future access; approvals and revocations are kept in an audit trail.
+M08
+D
+CR-027
+The UI states that revocation cannot erase information already viewed, downloaded or copied.
+M08
+D
+CR-028
+Patient selects allergies, important conditions, medications and emergency contacts for the emergency profile.
+M09
+D
+CR-029
+A QR encodes a minimal emergency profile directly so it scans without internet; a printable card shows last-updated date and verification status; the owner can update or replace the QR.
+M09
+D
+CR-030
+The UI states that copied offline QR data cannot be revoked; the full vault is never encoded.
+M09
+D
+CR-031
+AI summarises reports in plain language, extracts test names, values, units and stated reference ranges, and flags values outside printed ranges.
+M10
+D
+CR-032
+AI compares reports across dates, links explanations to source documents and pages, flags uncertain or missing information, and generates patient-reviewed consultation summaries.
+M10
+D
+CR-033
+AI explanations are labelled informational, not diagnosis.
+M10
+D
+CR-034
+Users scan handwritten or printed prescriptions; images are preprocessed; candidate medicine names, strengths and instructions are extracted.
+M11
+D
+CR-035
+Uncertainty and alternative readings are shown beside the original image; users review and correct; confirmed data is saved and earlier prescriptions can be retrieved.
+M11
+D
+CR-036
+Uncertain names, strengths and doses are never silently guessed; handwriting recognition is evaluated against labelled samples.
+M11
+D
+CR-037
+Users search medicines by name or supported identifier and see available ingredients, strengths and formulations from reference sources.
+M12
+D
+CR-038
+Prescription candidates are compared with reference data and discrepancies flagged; no claim of package authenticity; no dose prescribing.
+M12
+D
+CR-039
+A patient-specific chatbot answers questions about reports, medicines, allergies and appointments from authorised records, compares reports, explains terms, finds records by natural language and prepares history summaries for review.
+M13
+D
+CR-040
+Answers cite source documents, dates and passages; missing, conflicting or uncertain information is acknowledged; RAG is used instead of an unrestricted prompt; the chatbot never invents history, diagnoses or changes prescriptions.
+M13
+D
+CR-041
+Users can speak in English, Hindi or Telugu; speech becomes text; answers, explanations and reminders can be read aloud; typing and voice are interchangeable; records are retrieved only after authentication.
+M14
+D
+CR-042
+The entire interface switches among English, हिन्दी and తెలుగు via header and settings selectors; preference is saved; chatbot and voice follow it; fonts and layouts are accessible.
+M15
+D
+CR-043
+Users create, reschedule and cancel appointments; see upcoming and past visits; store doctor and clinic details.
+M16
+D
+CR-044
+Reminders are scheduled through configured backend services; the chatbot can retrieve appointment dates; patient-recorded follow-up instructions are saved.
+M16
+D
+CR-045
+Meal suggestions by preference (vegetarian/non-vegetarian), considering recorded allergies and restrictions, with weekly plans, grocery lists and nutrition education; clearly not a substitute for clinician-directed diets.
+M17
+D
+CR-046
+Chronological record history with semantic search; search by date, category, doctor or document content.
+M18
+D
+CR-047
+Compare recorded values where appropriate; build a consultation brief from patient-selected records.
+M18
+D
+CR-048
+Show who accessed which shared records and when; enforce server-side permissions, private storage, RLS and deletion workflows; test denial for unshared, expired and revoked documents.
+M18
+D
+CR-049
+Family relationships and doctor roles never override individual record permissions.
+M18, S19
+D
+CR-050
+Role model: adult patient, family member, guardian, doctor and administrator as defined in S19; administrators do not automatically receive unrestricted record access.
+S19
+D
+CR-051
+Face verification is authentication only, never a medical-record permission.
+S19
+D
+CR-052
+The system is built on the stack in Part B2 without unexplained substitutions.
+S20
+D
+CR-053
+Every protected request, including AI retrieval, is authenticated and authorised server-side (ownership, family permission, doctor grant, scope, expiry, revocation).
+All
+D
+CR-054
+Documents live in private storage; access URLs are short-lived signed URLs issued after authorisation; no public buckets.
+M01
+D
+CR-055
+Service-role keys and all provider secrets stay server-side; .env.example holds placeholders only.
+All
+D
+CR-056
+Audit logs cannot be modified or erased by ordinary users.
+M18
+D
+CR-057
+Development and demos use only synthetic data, with at least two patient accounts and one doctor account.
+All
+D
+CR-058
+A feature is not presented as implemented until it works; mock AI responses and demo data are clearly labelled.
+All
+D
+CR-059
+The hackathon demo journey works end to end (see D4).
+All
+D
+CR-060
+The web app is responsive and mobile-friendly.
+All
+D
+CR-061
+Accessibility: keyboard navigation, labelled controls, visible focus, sufficient contrast, readable Hindi/Telugu fonts.
+All
+I
+CR-062
+Logs never contain medical document content, OTP values, access tokens or face templates.
+All
+D
+CR-063
+Performance: list and detail pages respond in under 2 seconds on typical data; AI answers show progress while generating.
+All
+P
+CR-064
+Real-deployment readiness items (threat model, backups, retention, vendor review, legal review) are documented before any real patient data is used.
+All
+D
+CR-065
+CI runs backend, frontend and end-to-end tests on every push (GitHub Actions); frontend deployed to Vercel or equivalent; backend to a managed Python host or container platform.
+All
+D
+C6. Measurable success criteria
+All acceptance criteria in Part D pass in automated tests (Pytest, Vitest, Playwright).
+Cross-patient access test: Patient B can never read Patient A’s record (0 leaks).
+An expired or revoked grant returns a denial on the very next request.
+The demo journey in D4 completes end to end with synthetic data in under 10 minutes.
+The emergency QR is read in airplane mode and contains only the fields the patient selected.
+Every AI answer in the test set either cites a source passage or states that information is missing.
+The full interface renders in English, Hindi and Telugu with no untranslated strings on core screens.
+C7. Risks (summary; full register in Part F)
+Face verification and handwriting OCR accuracy; provider support for Hindi/Telugu speech; hallucinated medical content; privacy and legal exposure with real health data; scope size for a hackathon timeline (mitigated by your own build-order and phase gates).
+Part D — Product Requirements Document (PRD)
+D1. Roles and permissions [DOC]
+Role
+Can do
+Cannot do
+Adult patient
+Own all of their records; approve, scope and revoke sharing; use AI on own records
+See another person’s records without an explicit grant
+Family member
+Use own profile and records; optional face verification
+Open other members’ records because of a family tie or a face match
+Parent / authorised guardian
+Manage permitted dependant profiles
+Exceed the scope recorded in the family membership
+Doctor
+Request access by QR; view only records explicitly shared with their verified account, within scope and time
+Browse patients; use sensitive functions before verification
+Administrator
+Manage accounts; review doctor credentials; view security events
+Automatically read medical records
+Every role check is performed by FastAPI. The UI only hides controls for convenience.
+D2. Information architecture and navigation
+Taken from the route groups in your folder structure ([DOC]); page contents are proposed ([P]).
+Area
+Route group
+Pages
+Public
+(public)
+Landing page, Login (register, recovery, passkey, OTP/face options), language selector in header
+Patient
+(patient)
+dashboard, records, family, timeline, ai-assistant, appointments, emergency-card, sharing, settings
+Doctor
+(doctor)
+dashboard, requests, shared-records
+Admin
+(admin)
+dashboard, doctor-review, security-events
+All routes live under [locale] so every page is available in English (en), Hindi (hi) and Telugu (te).
+Shared components [DOC folders]: ui, layout, records, sharing, charts, forms. Global UI states [P]: every data screen implements loading (skeleton), empty (explanation + primary action), error (message + retry) and success (toast or inline confirmation) states. No decorative controls: each button, link and form must call a real handler or route, or be visibly disabled with an explanation.
+D3. Module specifications
+API paths use the groups from your document (/api/v1/...); individual endpoints are proposed [P]. Table names are from your database design [DOC].
+M01 — Smart Medical Record Vault
+Aspect
+Specification
+Purpose and user
+Patients keep every report, prescription, lab result, imaging report and discharge summary in one place.
+Inputs / outputs
+In: PDF/JPG/PNG file, title, category, record date, doctor, hospital. Out: record list, preview, download link, extraction status, duplicate warning.
+Frontend
+Upload dialog with drag-and-drop and camera scan on mobile; list with filters (date, category, doctor, hospital) and search; preview pane; delete with confirmation; OCR status badge; field editor for corrected extractions.
+Backend and data
+Upload to private storage with random key; metadata in medical_records; extracted text and confirmed values in record_extractions; file hash for duplicate detection [P]; original file never altered.
+API [P]
+POST /records, GET /records, GET /records/{id}, GET /records/{id}/download-url, PATCH /records/{id}, DELETE /records/{id}, PATCH /records/{id}/extraction.
+Validation and errors
+Allowed types PDF/JPG/PNG verified by content, not extension; maximum size 10 MB [P]; rejects with 415/413/422 and a readable message; storage failure leaves no orphan metadata.
+Security
+Owner or granted access only; private bucket; signed URL created after authorisation, expiring in minutes; deletion removes file and metadata.
+Acceptance
+A valid PDF uploads, appears after reload, previews and downloads; a 12 MB file and a renamed .exe are rejected; uploading the same file twice shows a possible-duplicate warning; Patient B gets 404/403 for Patient A’s record id.
+Tests
+Pytest upload/list/download/delete; ownership denial; Playwright upload-and-find journey.
+M02 — Secure Authentication and Session Management
+Aspect
+Specification
+Purpose and user
+Patients and doctors sign in securely and manage sessions.
+Inputs / outputs
+In: email/phone credentials, recovery requests, passkey assertions. Out: authenticated session, role claim, session list.
+Frontend
+Sign-up, login, forgot/reset password, passkey enrol and sign-in (shown only where the browser supports it), active-sessions list with “revoke” buttons, logout.
+Backend and data
+Supabase Auth issues tokens; FastAPI validates signature and claims on every request and loads the role from the database; login attempts and session events written to audit tables.
+API [P]
+GET /profiles/me, GET /auth/sessions, DELETE /auth/sessions/{id}.
+Validation and errors
+Password policy enforced by Supabase; generic message for wrong credentials; 429 with retry-after on rate limit; expired token returns 401 and the UI redirects to login.
+Security
+Never trust a user id or role sent by the browser; rate limiting; session revocation takes effect on the next request.
+Acceptance
+Valid login reaches the dashboard; an invalid token gets 401; a revoked session is rejected; repeated bad logins are throttled; passkey option is absent on unsupported browsers.
+Tests
+Pytest token validation (valid, expired, tampered); rate-limit test; Playwright login/logout/recovery.
+M03 — Family Face Authentication + OTP Fallback
+Aspect
+Specification
+Purpose and user
+Consenting family members optionally verify their own account by face, with a non-biometric alternative.
+Inputs / outputs
+In: consent, enrolment images, live camera frames, OTP code. Out: verified/not verified result for that account only.
+Frontend
+Family page lists members; consent screen explains purpose, storage and deletion before any camera request; enrol flow; verify flow with liveness prompt; always-visible “Use OTP or passkey instead” button; opt-out and delete-enrolment controls.
+Backend and data
+family_memberships for relationships and scopes; face/liveness provider called only by the backend; only a protected template is stored, raw images discarded unless needed [P]; OTP generated and checked by the configured provider, never in the browser.
+API [P]
+POST /family/members, POST /family/{id}/face/enrol, POST /family/{id}/face/verify, POST /family/{id}/otp/send, POST /family/{id}/otp/verify, DELETE /family/{id}/face.
+Validation and errors
+Camera denied or missing → OTP/passkey route; failed match → retry limit then OTP; OTP expiry and attempt limit; clear messages without revealing which factor failed.
+Security
+No camera on page load; explicit consent recorded with timestamp; rate limits; events logged without storing face data in logs; a successful match opens the member’s own session only.
+Acceptance
+Opening the site never prompts for the camera; denying the camera still lets the user sign in with OTP; a match for member A cannot open member B’s records; OTP fails after the attempt limit.
+Tests
+Pytest fallback and rate-limit logic with a mocked provider (labelled mock); Playwright with camera permission denied; cross-member denial test.
+M04 — Unauthorised-Access Detection and Alerts
+Aspect
+Specification
+Purpose and user
+Users and admins see and react to suspicious activity.
+Inputs / outputs
+In: login failures, new devices/locations [P], denied-access attempts. Out: security events, alerts, temporary restrictions.
+Frontend
+Patient settings: security-event timeline and active sessions; admin security-events page; in-app and email/SMS alert preferences.
+Backend and data
+Rules engine writes to access_audit_logs; temporary lockout after repeated failures; notifications via the configured provider.
+API [P]
+GET /audit/security-events, GET /notifications, PATCH /notifications/preferences.
+Validation and errors
+Alerts de-duplicated (idempotent) to avoid spam; provider failure retried and logged.
+Security
+No photographs of intruders; alert text contains no medical content.
+Acceptance
+Five failed logins create one security event, a temporary restriction and one alert; the user can revoke the suspicious session.
+Tests
+Pytest rule tests; notification mock; Playwright event timeline check.
+M05 — Doctor Verification System
+Aspect
+Specification
+Purpose and user
+Doctors prove credentials; patients and admins can trust the badge.
+Inputs / outputs
+In: registration details, credential documents. Out: status pending/verified/rejected with timestamps.
+Frontend
+Doctor registration form with credential upload; status banner; admin doctor-review queue with approve/reject and reason; verified badge shown on QR requests.
+Backend and data
+doctors holds profile, status, reviewer, timestamps; credential files in private storage.
+API [P]
+POST /doctors/register, GET /doctors/me, GET /doctors/pending (admin), POST /doctors/{id}/verify, POST /doctors/{id}/reject.
+Validation and errors
+Required fields and file types; only admins can change status; rejected doctors see the reason and can resubmit.
+Security
+Badge derives only from stored status “verified”; unverified doctors cannot create sharing requests.
+Acceptance
+A new doctor is “pending” and blocked from QR requests; after admin approval the badge shows and requests are allowed; a non-admin calling verify gets 403.
+Tests
+Pytest role and status transitions; Playwright admin review journey.
+M06 — QR-Based Secure Medical Sharing
+Aspect
+Specification
+Purpose and user
+A verified doctor requests access; the patient approves exactly what is shared.
+Inputs / outputs
+In: doctor request, patient scan, record selection, purpose, duration. Out: scoped access_grants row.
+Frontend
+Doctor requests page shows a QR with countdown; patient sharing page scans it (html5-qrcode or native camera), shows doctor name, verification status and request purpose, then record picker, purpose, duration, Approve/Reject.
+Backend and data
+Doctor request creates consent_requests with a random opaque id and short expiry [P: 5 minutes]; approval creates access_grants bound to the doctor’s account id.
+API [P]
+POST /qr/requests, GET /qr/requests/{id}, POST /consent/requests/{id}/approve, POST /consent/requests/{id}/reject, GET /doctors/shared-records.
+Validation and errors
+Expired or used request id → 410; scan by a different patient than intended is allowed but grant is only for the doctor who displayed it; empty selection cannot be approved.
+Security
+QR holds only the opaque id; one-time use; grant checked on every record fetch; QR scan alone grants nothing.
+Acceptance
+After approval the doctor sees only selected records; before approval the doctor gets 403; an expired QR cannot be approved; decoding the QR reveals no medical data.
+Tests
+Pytest consent lifecycle; negative tests for reuse and expiry; Playwright patient + doctor two-browser flow.
+M07 — OPD and Admission Toggle
+Aspect
+Specification
+Purpose and user
+Patients choose between a narrow consultation share and a broader admission share.
+Inputs / outputs
+In: mode, selected records, duration. Out: grant with mode and scope.
+Frontend
+Mode switch on the approval screen: OPD (default, nothing preselected) and Admission (suggested relevant records preselected but editable, summary of scope and duration before confirm).
+Backend and data
+Mode stored on access_grants; Admission scope limited to what the patient confirms.
+API [P]
+Same as M06 with mode field.
+Validation and errors
+Admission requires an explicit confirmation step listing every record; cannot be approved with zero records.
+Security
+Switching to Admission never selects or shares all records automatically.
+Acceptance
+Default is OFF; unselected records return 403 in both modes; OPD grant expires at the chosen time.
+Tests
+Pytest scope enforcement per mode; Playwright toggle flow.
+M08 — Limited-Time Access and Consent Management
+Aspect
+Specification
+Purpose and user
+Patients see and control every active grant.
+Inputs / outputs
+In: duration, purpose, revoke action. Out: grant list, audit trail.
+Frontend
+Active and past grants list with recipient, documents, purpose, expiry countdown, Revoke button, access history; notice that revocation cannot undo what was already viewed or copied.
+Backend and data
+access_grants (start, expiry, revoked_at); access_audit_logs for approvals, views, revocations; expiry checked in authorization logic and also swept by expiry_worker.
+API [P]
+GET /consent/grants, POST /consent/grants/{id}/revoke, GET /audit/grants/{id}.
+Validation and errors
+Duration limits [P: 1 hour to 30 days]; revoking an already revoked grant is idempotent.
+Security
+Expiry and revocation enforced on the server for every request even if the UI is stale.
+Acceptance
+A grant set to 1 minute is denied after expiry without any worker running; revoked grant is denied immediately; audit log shows approve and revoke entries.
+Tests
+Pytest time-travel tests; Playwright revoke-then-doctor-refresh.
+M09 — Offline Emergency QR
+Aspect
+Specification
+Purpose and user
+First responders read critical information with no internet.
+Inputs / outputs
+In: selected allergies, conditions, medications, contacts. Out: QR image, printable card.
+Frontend
+emergency-card page with checkboxes per field, live QR preview, last-updated date, verification status label, Print, Update/Replace buttons, warning about copied data.
+Backend and data
+emergency_profiles stores selections and update date; payload encoded directly in the QR (compact JSON [P]) generated with Python qrcode.
+API [P]
+GET /emergency, PUT /emergency, GET /emergency/qr.
+Validation and errors
+Payload size capped to fit a scannable QR; warns if too large.
+Security
+Only selected fields; no medical records, no tokens, no links to the vault.
+Acceptance
+QR scanned in airplane mode shows exactly the selected fields and updated date; unselected fields are absent; replacing the QR produces a new payload.
+Tests
+Pytest payload content test; manual airplane-mode check recorded in test log; Playwright print view.
+M10 — AI Medical Document Summarisation
+Aspect
+Specification
+Purpose and user
+Patients understand long reports in plain language.
+Inputs / outputs
+In: a stored record. Out: summary, table of tests/values/units/printed ranges with out-of-range flags, uncertainty notes, source page links.
+Frontend
+“Explain this report” button; summary panel beside the document viewer; clickable page references; “AI-generated, informational only” label; patient edit and approve for consultation summaries.
+Backend and data
+PyMuPDF/OCR text → structured extraction → LLM summary; results stored in record_extractions; validation step checks every cited value exists in the source.
+API [P]
+POST /summaries/{record_id}, GET /summaries/{record_id}, POST /summaries/compare.
+Validation and errors
+Unreadable document → clear message and offer manual entry; values not found in the source are dropped or flagged.
+Security
+Only the owner’s authorised record text goes to the LLM provider; no content in logs.
+Acceptance
+For a synthetic blood report each extracted value matches the source; flagged values compare against the report’s printed ranges only; missing information is reported, not invented.
+Tests
+Pytest on labelled synthetic reports; source-validation tests; comparison test across two dates.
+M11 — RxScript Intelligence (Handwritten Prescription OCR)
+Aspect
+Specification
+Purpose and user
+Turn prescription photos into reviewable structured data.
+Inputs / outputs
+In: prescription image/PDF. Out: candidate medicines (name, strength, instructions) with confidence and alternative readings.
+Frontend
+Split view: original image left, editable extracted fields right, confidence indicators, “needs review” markers, Confirm and Save; history of earlier prescriptions.
+Backend and data
+OpenCV preprocessing → PaddleOCR (printed) → handwriting model after evaluation; candidates and confirmed values in prescriptions.
+API [P]
+POST /prescriptions/scan, GET /prescriptions, PATCH /prescriptions/{id}/confirm.
+Validation and errors
+Low-confidence fields cannot be saved as confirmed without user action; blur/rotation hints.
+Security
+Same private storage rules as M01.
+Acceptance
+On the labelled evaluation set, results report accuracy per field; every uncertain field is marked; nothing is stored as confirmed without user review.
+Tests
+ai/evaluation/test_cases with labelled samples; Pytest review-workflow tests.
+M12 — Medicine Information Lookup
+Aspect
+Specification
+Purpose and user
+Show reference information and flag mismatches with prescription candidates.
+Inputs / outputs
+In: medicine name or supported identifier. Out: ingredients, strengths, formulations, discrepancy flags.
+Frontend
+Search box with results list; detail page; “compare with prescription” action; notice that a match does not prove a package is genuine.
+Backend and data
+Trusted medicine reference source and matching logic (source to be chosen, Q8).
+API [P]
+GET /medicines/search, GET /medicines/{id}, POST /medicines/compare.
+Validation and errors
+No results → suggest spelling alternatives; source unavailable → clear error.
+Security
+No personal data sent to the reference source.
+Acceptance
+Known synthetic medicines return correct ingredients/strengths; a prescription with a mismatched strength is flagged; no dose advice appears.
+Tests
+Pytest matching tests; Playwright search flow.
+M13 — Personal AI Health Chatbot
+Aspect
+Specification
+Purpose and user
+Patients ask questions about their own records.
+Inputs / outputs
+In: text or voice question, language. Out: answer with citations (document, date, page/passage).
+Frontend
+ai-assistant chat with source chips linking to the document viewer; “not found in your records” responses; clear AI/mock label until the real provider and retrieval work; history of chat sessions.
+Backend and data
+document_chunks + pgvector; retrieval filtered by the policy layer first; only authorised chunks go to the LLM; metadata in chat_sessions.
+API [P]
+POST /chat/sessions, POST /chat/sessions/{id}/messages, GET /chat/sessions.
+Validation and errors
+Empty question rejected; provider timeout shows retry; no sources → answer says information is missing.
+Security
+Retrieval authorisation identical to M01; prompt never includes unauthorised records; no diagnosis or prescription changes.
+Acceptance
+Questions about allergies, last report values and appointment dates return correct cited answers on synthetic data; a question about another patient’s data returns nothing; unsupported questions get a “not in your records” reply.
+Tests
+Pytest retrieval authorisation; groundedness checks; Playwright chat flow.
+M14 — Multilingual Voice Assistant
+Aspect
+Specification
+Purpose and user
+Hands-free questions and spoken answers in English, Hindi and Telugu.
+Inputs / outputs
+In: microphone audio. Out: transcript, answer text, spoken audio.
+Frontend
+Microphone button with permission prompt and recording indicator; transcript editable before sending; “Read aloud” on answers, reports and reminders; language follows the user’s setting.
+Backend and data
+STT/TTS provider behind speech_provider.py; separate from website translation so each can be swapped.
+API [P]
+POST /chat/voice/transcribe, POST /chat/voice/speak.
+Validation and errors
+Unsupported language/low confidence → ask user to confirm or type; provider error falls back to text.
+Security
+Audio not stored by default [P]; user must be authenticated.
+Acceptance
+The Telugu question in your document is transcribed and answered from the user’s own last report; Hindi and English equivalents work; provider is chosen after accuracy testing.
+Tests
+Recorded sample set per language; Pytest provider adapter tests with mocks (labelled).
+M15 — Full Website Language Switching
+Aspect
+Specification
+Purpose and user
+Every user reads the whole site in their language.
+Inputs / outputs
+In: language selection. Out: translated UI, saved preference.
+Frontend
+English / हिन्दी / తెలుగు selector in header and settings; messages/en.json, hi.json, te.json; all strings via next-intl (no hardcoded text); suitable Hindi/Telugu fonts.
+Backend and data
+Preference saved in profiles.
+API [P]
+PATCH /profiles/me (language).
+Validation and errors
+Missing key falls back to English and is logged in development.
+Security
+None specific.
+Acceptance
+Switching language changes navigation, buttons, forms, notifications and help text on all core screens and persists after reload and re-login; chatbot and voice follow it.
+Tests
+Script that fails if a key exists in en.json but not in hi.json/te.json; Playwright language-switch test.
+M16 — Appointment Management and Reminders
+Aspect
+Specification
+Purpose and user
+Patients track visits and receive reminders.
+Inputs / outputs
+In: doctor, clinic, date-time, notes, reminder preferences, follow-up instructions. Out: appointment list, reminders.
+Frontend
+Calendar and list (upcoming / past); create, reschedule, cancel; reminder settings; follow-up notes field.
+Backend and data
+appointments; reminder_worker scheduled job via notification provider; idempotent sends with retry.
+API [P]
+POST /appointments, GET /appointments, PATCH /appointments/{id}, DELETE /appointments/{id}.
+Validation and errors
+Date in the past warned; timezone stored explicitly [P]; provider failure retried.
+Security
+Owner-only; appointment details excluded from logs.
+Acceptance
+A new appointment appears in upcoming; cancelling removes the reminder; the chatbot returns the correct date; a reminder is sent once.
+Tests
+Pytest worker idempotency; Playwright appointment journey.
+M17 — AI Diet and General Health Guidance
+Aspect
+Specification
+Purpose and user
+General wellness suggestions within safe limits.
+Inputs / outputs
+In: food preference, restrictions, allergies. Out: weekly plan, grocery list, nutrition education.
+Frontend
+Preference form; plan view; grocery list; permanent notice that it does not replace clinician-directed diets.
+Backend and data
+LLM with bounded prompt; allergies read from the patient’s own records.
+API [P]
+POST /wellness/meal-plan.
+Validation and errors
+Conflict with an allergy blocks the item; if a clinician diet is recorded, the user is told to follow it.
+Security
+Only authorised own data used.
+Acceptance
+No suggested meal contains a recorded allergen; vegetarian preference yields no meat items; disclaimer visible.
+Tests
+Pytest allergen-conflict tests; Playwright plan generation.
+M18 — Smart Health Timeline, Consultation Brief and Security Audit
+Aspect
+Specification
+Purpose and user
+See health history, prepare for a visit, and inspect who accessed what.
+Inputs / outputs
+In: filters, search text, selected records. Out: timeline, value charts, consultation brief, access history.
+Frontend
+timeline with filters and semantic search; Recharts trend for comparable values; “Build consultation brief” wizard with patient review; audit view of access events.
+Backend and data
+health_events, document_chunks, access_audit_logs; RLS enabled as defense in depth.
+API [P]
+GET /timeline, POST /timeline/brief, GET /audit.
+Validation and errors
+Values only compared when units match; otherwise flagged.
+Security
+Audit rows append-only for users; deletion workflows remove files and derived data.
+Acceptance
+Search by date, category, doctor and content returns correct records; the brief contains only patient-selected records; the audit view lists every doctor access with timestamp; denial tests pass for unshared, expired and revoked records.
+Tests
+Pytest RLS and policy tests; Playwright brief journey.
+D4. Key user journeys
+Hackathon demo journey [DOC]:
+Sign in as a synthetic patient; upload a sample blood report.
+Ask the chatbot to explain it and open the source page.
+Switch the website to Telugu and ask about the same record.
+Doctor account generates a QR access request.
+Patient approves one selected document for a limited time; show that an expired or revoked grant is denied.
+Show the emergency QR working in airplane mode with only the selected fields.
+Additional journeys [P]: doctor registration → admin review → verified badge; family member enrolment → face verification declined → OTP sign-in; prescription scan → review → confirmed → medicine lookup; appointment creation → reminder.
+D5. Data rules [DOC]
+Every record has an owner; every query respects the authenticated user and any explicit family or doctor grant.
+Consent is a real permission record; a QR scan is not permission.
+Revocation and expiry are enforced on the server on the next request.
+Audit logs are protected from ordinary users.
+D6. Accessibility and responsiveness
+Mobile-first layouts from 360 px; keyboard operable; visible focus; labelled inputs and ARIA where needed; contrast 4.5:1; Hindi and Telugu fonts loaded and tested for clipping; camera and microphone screens explain purpose before requesting permission.
+Part E — Antigravity Implementation Plan
+This plan follows the seven-phase prompt sequence and the build order already in your document, and adds the detail Antigravity needs for each phase. Phase 01’s prompt is copied from your document; prompts for Phases 02–07 are proposed [P] in the same style. Always begin by telling Antigravity to read AGENTS.md.
+E1. How your document’s two sequences fit together
+Your roadmap (section 21 / build order)
+Antigravity phases below
+Phase 1 — Secure foundation (accounts, profiles, uploads, family membership, private storage)
+Phases 01, 02, 03
+Phase 2 — Authentication and sharing (passkeys, doctor verification, QR consent, OPD/admission, expiry, revocation)
+Phase 04
+Phase 3 — AI health memory (OCR, summaries, chatbot, semantic search, briefs)
+Phase 05
+Phase 4 — Multilingual accessibility, voice, appointments, wellness
+Phase 06 (steps 06A–06C)
+Phase 5 — Advanced modules (emergency QR, handwriting OCR, medicine lookup, face verification, enhanced alerts)
+Phase 06 (steps 06D–06G)
+End-to-end demo and verification
+Phase 07
+Phase gate rule [DOC-derived]: do not start a phase until the previous phase’s tests pass and its changes have been reviewed. Build the UI, API, database changes and tests of each feature together. Do not create empty endpoints and mark them complete.
+E2. Phase 00 — Prerequisites (you, before Antigravity)
+Install Node.js, npm, Python 3.11+ [P], Git; verify with node -v, npm -v, python --version, git --version.
+Create the folder aegis-care, open it as the Antigravity workspace, run git init.
+Create a Supabase project (free tier is enough for development); keep the keys private.
+Create AGENTS.md from your document (Step 2) in the repository root.
+Decide or accept defaults for the open questions in Part F that block Phase 03 (Q2, Q3).
+E3. Phase 01 — Foundation and architecture
+Item
+Detail
+Objective
+A running monorepo skeleton: Next.js app, FastAPI app, environment templates, health check, docs.
+Requirements covered
+CR-052, CR-055, CR-065 (CI skeleton), CR-053 (architecture rule recorded).
+Prerequisites
+Phase 00 done.
+Files to create
+AGENTS.md, README.md, .gitignore, .env.example, docker-compose.yml, apps/web/** (create-next-app output), services/api/app/main.py, core/config.py, core/logging.py, core/exceptions.py, api/v1/router.py, api/v1/endpoints/health.py, pyproject.toml, Dockerfile, docs/architecture.md, .github/workflows/ci.yml [P].
+Tasks
+1) Initialise the Next.js App Router project in apps/web with TypeScript and Tailwind. 2) Create the FastAPI project with /api/v1 router, Pydantic settings and GET /api/v1/health. 3) Add .env.example files with placeholders only. 4) Write docs/architecture.md from the architecture in your document. 5) Add lint/test scripts and a minimal CI workflow. Do not implement product features.
+Commands [P]
+npx create-next-app@latest apps/web (TypeScript, Tailwind, App Router); cd services/api && python -m venv .venv && pip install fastapi "uvicorn[standard]" pydantic-settings pytest httpx; uvicorn app.main:app --reload; pytest; cd apps/web && npm run lint && npm run build. Verify current package versions before installing.
+Expected results
+http://localhost:8000/api/v1/health returns 200; http://localhost:3000 renders; pytest and npm run build pass; no secrets committed.
+Definition of done
+Health test passes; both apps start locally; docs and README explain how to run them.
+Gate
+Review the generated files and commands before Phase 02.
+Antigravity prompt (copied from your document [DOC]):
+Read AGENTS.md and follow it strictly. Set up the Aegis Care monorepo using the approved architecture. Configure apps/web as Next.js App Router with TypeScript and Tailwind CSS. Configure services/api as a Python FastAPI application with versioned /api/v1 routing, Pydantic settings and a health endpoint. Add .gitignore, safe .env.example files, initial README.md and docs/architecture.md. Do not implement all product features yet. Do not put secrets in code. Run available frontend and backend checks and report the files created, commands run, failures and next steps.
+E4. Phase 02 — Design system and dashboard
+Item
+Detail
+Objective
+Responsive shell, navigation, accessible components and a dashboard clearly labelled as using synthetic data.
+Requirements covered
+CR-042 (next-intl scaffold), CR-058, CR-060, CR-061.
+Prerequisites
+Phase 01 passing.
+Files
+apps/web/src/app/[locale]/(public|patient|doctor|admin)/** placeholders with real layouts; components/ui (shadcn/ui), components/layout, components/forms, components/charts; messages/en.json, hi.json, te.json (initial keys); middleware.ts (locale routing); lib/api-client.ts.
+Tasks
+1) Install shadcn/ui; build header with language selector, sidebar/bottom navigation, role-based layout shells. 2) Configure next-intl so no UI text is hardcoded. 3) Build reusable components: Button, Input, Select, Dialog, Toast, Table, Skeleton, EmptyState, ErrorState. 4) Patient dashboard cards (upcoming appointments, recent records, active shares, security status) using demo data with a visible “Demo data” label. 5) Set up Vitest + React Testing Library and Playwright.
+Commands [P]
+npx shadcn@latest init; npm run test; npx playwright install; npx playwright test; npm run build.
+Expected results
+All route groups render in three languages; keyboard navigation works; 375 px layout has no horizontal scroll.
+Definition of done
+Component tests and a Playwright smoke test pass; no control is a dead button (each is wired or visibly disabled).
+Gate
+Visual and accessibility review.
+Prompt [P]: “Read AGENTS.md. Build the responsive Aegis Care application shell in apps/web: locale-aware routing with next-intl for en, hi and te, header with language selector, role-based layouts for the (patient), (doctor) and (admin) route groups, reusable accessible shadcn/ui components, and a patient dashboard that uses clearly labelled synthetic demo data. Do not connect any backend or implement other modules. Add Vitest and Playwright smoke tests, run them, and report files changed and results.”
+E5. Phase 03 — Authentication, profiles, family memberships and private records
+Item
+Detail
+Objective
+Real sign-in and a working medical vault with server-enforced ownership.
+Requirements covered
+CR-001 to CR-005, CR-007 (rate limiting, session revocation), CR-008 (profiles/memberships only), CR-049, CR-050, CR-053, CR-054, CR-056, CR-057, CR-060.
+Prerequisites
+Phase 02; Supabase project and keys in local env files.
+Files
+database/supabase/migrations/* (profiles, family_memberships, medical_records, record_extractions, access_audit_logs, RLS policies); database/supabase/seed.sql (two synthetic patients, one doctor); services/api/app/core/security.py, api/deps.py, policies/*, models/*, schemas/*, repositories/*, services/*, api/v1/endpoints/profiles.py, records.py, family.py, audit.py, integrations/supabase.py; web features/auth, features/medical-records, features/family, login and vault pages.
+Tasks
+1) Write migrations and RLS policies; apply them. 2) Validate Supabase tokens in FastAPI (signature, expiry, claims); load role from the database. 3) Implement profile endpoints and family membership creation (no face feature yet). 4) Implement upload (type and size validation, private bucket, random keys, SHA-256 for duplicates), list/search/filter, preview via signed URL, download, delete. 5) Account recovery, logout, session list and revoke, rate limiting on auth-related endpoints. 6) Connect the vault UI and replace demo data on pages that now have real data. 7) Write audit events for upload, view and delete.
+Commands [P]
+supabase start / supabase db push; pytest services/api/tests -q; npm run test; npx playwright test.
+Tests required
+Valid/expired/tampered token; Patient B cannot read Patient A’s record (API and RLS); unsupported file types and oversize files rejected; signed URL expires; duplicate warning; deletion removes file; audit rows cannot be updated by a normal user.
+Expected results
+Two synthetic patients each see only their own data; upload → reload → preview works.
+Definition of done
+All tests above pass; no service-role key reachable from the browser (verified by searching the built bundle).
+Gate
+Security tests green before sharing features begin.
+Prompt [P]: “Read AGENTS.md. Connect Supabase Auth and implement the secure core: SQL migrations with Row-Level Security for profiles, family_memberships, medical_records, record_extractions and access_audit_logs; FastAPI token validation and an ownership policy layer; upload, list, search, preview, download and delete for PDF/JPG/PNG with private storage and signed URLs; session list and revoke; rate limiting. Update the web vault UI to use these endpoints. Do not implement sharing or AI yet. Add Pytest tests for cross-patient access denial, invalid tokens and file validation, plus a Playwright upload journey. Run everything and report results and any failures.”
+E6. Phase 04 — Doctor verification, consent, QR sharing, OPD/Admission, expiry, revocation, passkeys and security alerts
+Item
+Detail
+Objective
+The patient-controlled sharing flow, proven by denial tests.
+Requirements covered
+CR-006, CR-014 to CR-027, CR-048, CR-049, CR-053, CR-062.
+Prerequisites
+Phase 03 gate passed.
+Files
+Migrations for doctors, consent_requests, access_grants; endpoints/doctors.py, consent.py, qr_sharing.py, audit.py, notifications.py; policies/grant_policy.py; workers/expiry_worker.py; web features/doctor-verification, consent, qr-sharing, security; pages (doctor)/requests, (doctor)/shared-records, (patient)/sharing, (admin)/doctor-review, (admin)/security-events.
+Tasks
+1) Doctor registration, credential upload, admin approve/reject with timestamps. 2) QR request creation (opaque id, 5-minute expiry [P], one-time use). 3) Patient scanner (html5-qrcode), doctor identity/status display, record picker, purpose, duration, approve/reject. 4) OPD and Admission modes with explicit scope confirmation. 5) Grant policy enforced inside every record-access path; expiry worker as secondary cleanup only. 6) Revocation and access history with the “cannot undo viewed data” notice. 7) Passkey (WebAuthn) enrolment/sign-in where supported. 8) Failed-login detection, temporary restriction, security-event timeline, notification provider integration.
+Commands [P]
+Same test commands as Phase 03; add pytest -m security.
+Tests required
+Unverified doctor blocked; unapproved request returns 403; reused or expired QR rejected; QR payload contains no records or reusable token; grant limited to selected records; expired and revoked grants denied on next request without worker; admin cannot read records by default; audit entries written; passkey option hidden when unsupported.
+Expected results
+Demo step 4–5 (QR request → selective approval → expiry/revocation denial) works with two browser sessions.
+Definition of done
+All security tests green; demo steps verified manually and by Playwright.
+Gate
+Do not begin AI retrieval until grant and ownership policies are proven.
+Prompt [P]: “Read AGENTS.md and docs/consent-and-access.md. Implement doctor registration with admin verification, short-lived opaque QR access requests, patient approval with selected records, purpose and duration, OPD and Admission modes, server-side expiry and revocation, access audit history, passkey sign-in where supported, and failed-login security events with alerts. The QR must contain only an opaque request id. Add Pytest tests for every denial case (unverified doctor, expired request, reused QR, unshared record, expired grant, revoked grant, cross-patient access) and a two-browser Playwright test. Do not start AI features. Run all tests and report results.”
+E7. Phase 05 — AI health memory
+Item
+Detail
+Objective
+Source-linked summaries, authorised RAG chatbot, timeline, semantic search and consultation briefs.
+Requirements covered
+CR-004, CR-031 to CR-033, CR-039, CR-040, CR-046, CR-047, CR-058, CR-062.
+Prerequisites
+Phase 04 gate; LLM and embedding provider chosen (Q2).
+Files
+ai/ingestion/pdf_extractor.py, image_preprocessor.py, ocr_pipeline.py; ai/summarisation/report_summary.py, source_validation.py; ai/retrieval/chunking.py, embeddings.py, retriever.py; integrations/llm_provider.py; endpoints/summaries.py, ai_chat.py, timeline.py; migrations for document_chunks (pgvector), chat_sessions, health_events; web features/ai-chat, health-timeline, (patient)/ai-assistant, timeline.
+Tasks
+1) Extract text with PyMuPDF; OCR scanned pages with OpenCV + PaddleOCR; track processing status. 2) Chunk text with page references; embed into pgvector. 3) Summarise and extract values, units and printed ranges; validate every value against source text. 4) Retrieval: authorise first (ownership/family/grant), then search, then call the LLM with only those chunks; return citations. 5) Chatbot UI with source chips and clear mock labels if the provider is not yet connected. 6) Timeline, semantic search, value comparison charts, consultation brief with patient review.
+Commands [P]
+pytest ai services/api -q; evaluation script in ai/evaluation.
+Tests required
+Retrieval never returns another patient’s chunks; answers cite sources; unanswerable questions return “not in your records”; extracted values equal source values on labelled synthetic reports; no diagnosis or prescription-change output in red-team prompts; OCR status transitions.
+Expected results
+Demo steps 1–2 work.
+Definition of done
+Evaluation report committed in docs/; all tests pass; mock responses (if any) labelled.
+Gate
+Groundedness and authorisation tests green.
+Prompt [P]: “Read AGENTS.md. Implement document intelligence and patient-specific RAG: PyMuPDF/PaddleOCR extraction with status tracking, page-aware chunking, pgvector embeddings, source-validated report summaries (test names, values, units, printed reference ranges), a chatbot that authorises records first and returns citations, a health timeline with semantic search, and a consultation brief builder with patient review. Never invent history, diagnoses or medicine changes. Add Pytest tests for authorisation, groundedness and unanswerable questions. Clearly label any mock responses. Run all tests and report.”
+E8. Phase 06 — Language, voice, daily tools and advanced modules
+Build in this order, one step at a time, each with its own tests and gate (modular so advanced items do not delay the core).
+Step
+Scope
+Requirements
+Key tasks and tests
+06A
+Full website translation (M15)
+CR-042
+Complete en/hi/te messages; language preference saved in profile; key-parity script; font checks; Playwright switch test.
+06B
+Appointments and reminders (M16)
+CR-043, CR-044
+appointments migration; CRUD UI; reminder_worker with idempotent retries; chatbot retrieval of dates; worker and UI tests.
+06C
+Wellness guidance and voice (M17, M14)
+CR-045, CR-041
+Bounded meal-plan endpoint with allergen checks; evaluate STT/TTS on recorded English, Hindi and Telugu samples before choosing; voice UI with text fallback; adapter tests.
+06D
+Offline emergency QR (M09)
+CR-028 to CR-030
+emergency_profiles; selection UI; compact payload QR; printable card; airplane-mode manual test.
+06E
+Prescription OCR and medicine lookup (M11, M12)
+CR-034 to CR-038
+prescriptions migration; split review UI; evaluation set with labelled handwriting samples and accuracy report; medicine reference adapter and comparison.
+06F
+Family face verification with OTP fallback (M03)
+CR-008 to CR-013
+Evaluate face/liveness solutions first; consent and enrolment screens; OTP via provider; fallbacks and rate limits; tests proving a match opens only that member’s own account.
+06G
+Enhanced security alerts
+CR-014, CR-015
+Extend rules; notification preferences; tests.
+Prompt template [P]: “Read AGENTS.md. Implement step 06X only: . Follow the module specification in PRD section D3, keep the feature modular behind its provider adapter, label mocks, add tests including access-denial and failure cases, run all tests and report. Do not touch other modules.”
+E9. Phase 07 — End-to-end verification, hardening and deployment
+Item
+Detail
+Objective
+Prove the complete journey, then deploy with verification.
+Requirements covered
+CR-057 to CR-059, CR-063 to CR-065 and regression of all earlier requirements.
+Prerequisites
+Phases 01–06 gates passed (or features explicitly marked “not implemented” in the README).
+Files
+tests/e2e/*, .github/workflows/*, docs/deployment.md, docs/threat-model.md, docs/consent-and-access.md, services/api/Dockerfile, Vercel config.
+Tasks
+1) Playwright test for the six-step demo journey. 2) Security suite: expired/revoked/unshared/cross-patient/private-download/failed-auth/AI-missing-source. 3) Failure tests: provider down, storage error, invalid QR. 4) Dependency audit and secret scan; confirm no service-role key in the web bundle. 5) Production env configuration on Vercel and the chosen Python host; apply migrations; set secrets in host secret managers. 6) Smoke tests on the live URLs. 7) Final README listing each module as implemented, basic, or not implemented.
+Commands [P]
+pytest; npm run test; npx playwright test; npm run build; host-specific deploy commands.
+Expected results
+Green CI; live site passes smoke tests: sign-in, upload, chat answer with source, language switch, QR approval, revocation denial, emergency QR.
+Definition of done
+The site is called “deployed” only after the smoke tests pass on the live URLs; free-tier limits and manual steps are documented.
+Rollback
+Redeploy the previous release on each host; keep a database backup before each migration.
+Prompt [P]: “Read AGENTS.md. Write and run the end-to-end Playwright test for the six-step demo journey using synthetic data, extend the security test suite for every access-denial case, run dependency and secret scans, prepare deployment configuration and docs/deployment.md, and report which modules are fully implemented, basic or not implemented. Do not claim anything is deployed or working without test evidence.”
+E10. Test coverage matrix
+Requirement area
+Pytest
+Vitest
+Playwright
+Ownership and RLS (CR-053)
+Yes
+-
+Yes
+Vault (CR-001 to 004)
+Yes
+Yes
+Yes
+Auth and sessions (CR-005 to 007)
+Yes
+Yes
+Yes
+Sharing, expiry, revocation (CR-020 to 027)
+Yes
+Yes
+Yes (two sessions)
+Emergency QR (CR-028 to 030)
+Yes
+-
+Yes + manual offline test
+AI summaries and chatbot (CR-031 to 040)
+Yes + evaluation sets
+Yes
+Yes
+OCR and medicines (CR-034 to 038)
+Yes + labelled samples
+Yes
+Yes
+Language and voice (CR-041, 042)
+Yes (adapters)
+Yes
+Yes
+Appointments (CR-043, 044)
+Yes (worker)
+Yes
+Yes
+Face/OTP (CR-008 to 013)
+Yes (mocked provider, labelled)
+Yes
+Yes (camera denied)
+Mocked components must be named as mocks in code, tests and the README; real integrations are listed separately.
+Part F — Assumptions, Open Questions and Readiness
+#
+Open question or missing detail
+Why it matters
+Recommended default [P]
+Blocks?
+What you provide
+Q1
+Product name: MediWallet (file title) or Aegis Care (body text and repo name)?
+Branding, repo, UI strings
+Show “MediWallet” as the product name; keep aegis-care repo
+No
+Your decision
+Q2
+Which LLM and embedding providers?
+Needed for Phase 05
+One LLM API with an embedding model of the same vendor
+Phase 05
+Provider choice and API keys
+Q3
+Supabase project and region
+Needed for Phase 03
+Free-tier project
+Phase 03
+Create project; keys
+Q4
+OTP / email / SMS provider
+OTP, reminders, alerts
+Supabase email OTP first; SMS later
+Phase 04 (alerts), 06F
+Account and key
+Q5
+Face-verification and liveness solution
+M03
+Evaluate during 06F; ship OTP/passkey fallback first
+No
+Chosen solution or evaluation time
+Q6
+STT/TTS provider with Hindi/Telugu support
+M14
+Choose after accuracy tests in 06C
+No
+Provider and keys
+Q7
+Handwriting recognition model
+M11
+Evaluate TrOCR and a vision-language model on labelled samples
+No
+Sample prescriptions (synthetic)
+Q8
+Trusted medicine reference source
+M12
+Choose a licensed or public reference after review
+No
+Source access
+Q9
+How are doctor credentials actually checked?
+M05
+Manual admin review of uploaded documents; no claim of external registry checks
+No
+Admin process definition
+Q10
+Who is the first admin?
+M05, M19
+Seed one admin in development; documented manual step in production
+Phase 04
+Admin email
+Q11
+Maximum upload size and retention rules
+M01
+10 MB; deletion on request
+No
+Confirmation
+Q12
+Backend hosting (managed Python host or container platform)
+Phase 07
+Decide when Phase 06 is done
+Phase 07
+Account
+Q13
+Jurisdiction and applicable privacy law
+Real deployment
+Treat as a prototype with synthetic data only
+No (for demo)
+Legal review before real data
+Q14
+Languages for reminders/notifications
+M15, M16
+Follow user language
+No
+-
+Key risks: face-verification bias and legal exposure; handwriting OCR accuracy; AI hallucination in a medical context; provider cost and quotas; scope size (mitigated by phase gates; if time runs out, ship Phases 01–05 plus the emergency QR from 06D and mark the rest “not implemented”).
+Readiness statement
+Ready for Antigravity: yes, for Phase 01. Your document defines the features, stack, structure, AGENTS.md, environment variables and first prompt.
+Prerequisites still missing: a Supabase project (Q3) before Phase 03; an LLM/embedding provider (Q2) before Phase 05; OTP/notification, STT/TTS and face-verification choices (Q4–Q6) before their steps; confirmation of the product name (Q1).
+Implement first: Phase 01 (foundation and architecture) — create aegis-care, add AGENTS.md, open it in Antigravity and run the Phase 01 prompt only.
+No part of this blueprint claims that anything is built, deployed or verified; each phase’s tests must pass before it is called complete.

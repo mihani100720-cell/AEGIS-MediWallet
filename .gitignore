@@ -1,0 +1,14 @@
+﻿.env
+.venv/
+__pycache__/
+*.py[cod]
+*.zip
+
+.agents/mcp_config.json
+# Large AI model
+models/medical-prescription-ocr-india/model.safetensors
+
+# Local database and medical records
+services/api/data/mediwallet.db
+services/api/data/private_member_reports/
+services/api/data/records/
