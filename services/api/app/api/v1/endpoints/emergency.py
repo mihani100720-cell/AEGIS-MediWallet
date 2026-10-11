@@ -4,9 +4,9 @@ from typing import Optional, List
 from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 
-from services.api.app.models.database import get_db, EmergencyProfile, User
-from services.api.app.core.security import decode_access_token
-from services.api.app.schemas.schemas import EmergencyProfileUpdate
+from app.models.database import get_db, EmergencyProfile, User
+from app.core.security import decode_access_token
+from app.schemas.schemas import EmergencyProfileUpdate
 
 router = APIRouter()
 

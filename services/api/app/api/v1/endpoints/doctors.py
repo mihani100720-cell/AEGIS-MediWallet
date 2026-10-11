@@ -3,8 +3,8 @@ from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 from datetime import datetime, timezone
 
-from services.api.app.models.database import get_db, DoctorProfile, User, SecurityEvent
-from services.api.app.core.security import decode_access_token
+from app.models.database import get_db, DoctorProfile, User, SecurityEvent
+from app.core.security import decode_access_token
 
 router = APIRouter()
 

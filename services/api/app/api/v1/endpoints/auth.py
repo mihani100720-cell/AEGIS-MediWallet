@@ -4,15 +4,15 @@ from typing import Optional, List
 from datetime import datetime, timezone
 import uuid
 
-from services.api.app.models.database import get_db, User, UserSession, SecurityEvent
-from services.api.app.core.security import (
+from app.models.database import get_db, User, UserSession, SecurityEvent
+from app.core.security import (
     verify_password,
     create_access_token,
     decode_access_token,
     hash_password,
     hash_report_access_password
 )
-from services.api.app.schemas.schemas import (
+from app.schemas.schemas import (
     LoginRequest,
     TokenResponse,
     PasskeyLoginRequest,

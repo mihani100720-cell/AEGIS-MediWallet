@@ -10,19 +10,19 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, H
 from fastapi.responses import FileResponse, StreamingResponse
 from sqlalchemy.orm import Session
 
-from services.api.app.models.database import (
+from app.models.database import (
     get_db, MedicalRecord, User, VaultSession, AccessAuditLog, SecurityEvent, ConsentGrant
 )
-from services.api.app.core.security import (
+from app.core.security import (
     decode_access_token,
     hash_vault_password,
     verify_vault_password,
     generate_vault_session_token,
     validate_vault_password_strength
 )
-from services.api.app.core.config import settings
-from services.api.app.services.ai_service import AIService
-from services.api.app.schemas.schemas import (
+from app.core.config import settings
+from app.services.ai_service import AIService
+from app.schemas.schemas import (
     VaultSetupRequest,
     VaultUnlockRequest,
     VaultStatusResponse,

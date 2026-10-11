@@ -2,7 +2,7 @@ from typing import Optional, List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from services.api.app.models.database import get_db, Medicine
+from app.models.database import get_db, Medicine
 
 router = APIRouter()
 

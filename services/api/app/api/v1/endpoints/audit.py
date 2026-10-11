@@ -2,8 +2,8 @@ from typing import Optional, List
 from fastapi import APIRouter, Depends, Header
 from sqlalchemy.orm import Session
 
-from services.api.app.models.database import get_db, SecurityEvent, AccessAuditLog, MedicalRecord
-from services.api.app.core.security import decode_access_token
+from app.models.database import get_db, SecurityEvent, AccessAuditLog, MedicalRecord
+from app.core.security import decode_access_token
 
 router = APIRouter()
 

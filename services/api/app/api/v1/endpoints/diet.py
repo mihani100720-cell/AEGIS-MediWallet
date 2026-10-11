@@ -3,9 +3,9 @@ from fastapi import APIRouter, Depends, Query, Header
 from sqlalchemy.orm import Session
 import json
 
-from services.api.app.models.database import get_db, EmergencyProfile
-from services.api.app.core.security import decode_access_token
-from services.api.app.services.ai_service import AIService
+from app.models.database import get_db, EmergencyProfile
+from app.core.security import decode_access_token
+from app.services.ai_service import AIService
 
 router = APIRouter()
 

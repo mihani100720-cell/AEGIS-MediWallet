@@ -3,9 +3,9 @@ from typing import Optional, List
 from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 
-from services.api.app.models.database import get_db, FamilyMember, SecurityEvent
-from services.api.app.core.security import decode_access_token
-from services.api.app.schemas.schemas import FamilyMemberCreate, FaceVerifyRequest, OtpVerifyRequest
+from app.models.database import get_db, FamilyMember, SecurityEvent
+from app.core.security import decode_access_token
+from app.schemas.schemas import FamilyMemberCreate, FaceVerifyRequest, OtpVerifyRequest
 
 router = APIRouter()
 

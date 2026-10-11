@@ -12,7 +12,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, H
 from fastapi.responses import FileResponse, StreamingResponse
 from sqlalchemy.orm import Session
 
-from services.api.app.models.database import (
+from app.models.database import (
     get_db,
     User,
     HealthFolder,
@@ -22,7 +22,7 @@ from services.api.app.models.database import (
     FolderOTPVerification,
     FolderAccessAuditLog
 )
-from services.api.app.core.security import (
+from app.core.security import (
     decode_access_token,
     hash_report_access_password,
     verify_report_access_password,
@@ -31,8 +31,8 @@ from services.api.app.core.security import (
     hash_otp_code,
     verify_otp_code
 )
-from services.api.app.core.config import settings
-from services.api.app.schemas.schemas import (
+from app.core.config import settings
+from app.schemas.schemas import (
     FolderCreate,
     FolderUpdate,
     MemberCreate,

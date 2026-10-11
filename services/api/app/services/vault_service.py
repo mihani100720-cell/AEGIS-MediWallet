@@ -7,13 +7,13 @@ from typing import Tuple, Optional, Dict, Any
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from services.api.app.models.database import User, MedicalRecord, VaultSession, AccessAuditLog
-from services.api.app.core.security import (
+from app.models.database import User, MedicalRecord, VaultSession, AccessAuditLog
+from app.core.security import (
     hash_vault_password,
     verify_vault_password,
     generate_vault_session_token
 )
-from services.api.app.core.config import settings
+from app.core.config import settings
 
 VAULT_STORAGE_BASE = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../data/vault_storage"))
 MAX_FILE_SIZE_BYTES = 15 * 1024 * 1024  # 15 MB
@@ -259,7 +259,7 @@ class VaultSecurityService:
         # 2. Check if password is configured
         if not user.vault_password_hash or not user.vault_salt:
             # Fallback: check if password matches user account login password
-            from services.api.app.core.security import verify_password
+            from app.core.security import verify_password
             if verify_password(password, user.hashed_password):
                 # Auto-initialize vault password to account password
                 return cls.setup_vault_password(user, password, db)

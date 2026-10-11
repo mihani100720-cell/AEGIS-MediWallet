@@ -4,10 +4,10 @@ from typing import Optional, List
 from fastapi import APIRouter, Depends, HTTPException, Header, UploadFile, File, Query
 from sqlalchemy.orm import Session
 
-from services.api.app.models.database import get_db, PrescriptionExtraction, MedicalRecord
-from services.api.app.core.security import decode_access_token
-from services.api.app.schemas.schemas import PrescriptionReviewUpdate
-from services.api.app.services.ocr_engine import PrescriptionOCREngine
+from app.models.database import get_db, PrescriptionExtraction, MedicalRecord
+from app.core.security import decode_access_token
+from app.schemas.schemas import PrescriptionReviewUpdate
+from app.services.ocr_engine import PrescriptionOCREngine
 
 router = APIRouter()
 
